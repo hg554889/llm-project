@@ -9,7 +9,7 @@ function App() {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://localhost:3001/api');
-        setMessage(response.data.message);
+        setMessage(response.data);
       } catch (error) {
         console.error('API 호출 오류:', error);
         setMessage('API 호출 실패');

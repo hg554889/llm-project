@@ -16,6 +16,7 @@ connectDB();
 const hf = new HfInference(process.env.HF_API_KEY);
 
 app.use("/", require("./routes/main"));
+app.use("/auth", require("./routes/login")); // 로그인 라우터 추가
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

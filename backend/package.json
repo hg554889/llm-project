@@ -12,6 +12,7 @@
   "dependencies": {
     "@huggingface/inference": "^3.3.5",
     "@huggingface/transformers": "^3.3.3",
+    "bcryptjs": "^3.0.2",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",

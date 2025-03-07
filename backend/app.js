@@ -20,6 +20,7 @@ app.use("/ai", require("./routes/ai")); // 자소서 생성 라우터 추가
 app.use("/community", require("./routes/community")); // 커뮤니티 라우터 추가
 app.use("/list", require("./routes/list")); // 리스트 라우터 추가
 app.use("/mypage", require("./routes/my_page")); // 마이페이지 라우터 추가
+app.use("/qna", require("./routes/qna")); // QnA 라우터 추가
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

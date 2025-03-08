@@ -47,6 +47,18 @@ function App() {
     window.location.href='/src/envir/js';
   }
 
+  const handleRshClick=()=>{
+    window.location.href='/src/reseach.js';
+  }
+
+  const handleQnaClick=()=>{
+    window.location.href='/src/qna.js';
+  }
+
+  const handleComClick=()=>{
+    window.location.href='/src/community.js';
+  }
+
 
   return (
     <div className="container">
@@ -54,7 +66,9 @@ function App() {
     <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
       <h2>Menu</h2>
       <ul>
-        <li></li>
+        <li onClick={handleRshClick}>기업 검색</li>
+        <li onClick={handleQnaClick}>QnA</li>
+        <li onClick={handleComClick}>Community</li>
       </ul>
     </div>
     

@@ -1,4 +1,4 @@
-/* App.css */
+/* index.css */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -7,21 +7,33 @@ body {
   .container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
+    background-color: rgb(220, 234, 255);
   }
   
   .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
     background-color: #0a0a23; /* 헤더 배경색 */
     color: white;
-    padding: 20px;
+    padding: 0 20px;
+    width: 100%;
   }
-  
+
+  .header img{
+    width: 40px;
+    height: auto;
+
+  }
   .header h1 {
     margin: 0;
+    text-align: center;
   }
   
   .content {
-    background-color: #fff9d9; /* 연한 노란색 배경 */
     flex-grow: 1;
     display: flex;
     justify-content: center;

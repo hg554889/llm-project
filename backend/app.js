@@ -13,14 +13,16 @@ app.use(express.json());  // JSON 파싱을 위한 미들웨어 추가
 connectDB();
 
 app.use("/", require("./routes/main")); // 메인 라우터 추가
-app.use("/", require("./routes/login")); // 로그인 라우터 추가
-app.use("/", require("./routes/register")); // 회원가입 라우터 추가
-app.use("/search", require("./routes/search")); // 검색 라우터 추가
+app.use("/login", require("./routes/login")); // 로그인 라우터 추가
+app.use("/register", require("./routes/register")); // 회원가입 라우터 추가
+app.use("/chat", require("./routes/chat")); // 채팅 라우터 추가
 app.use("/ai", require("./routes/ai")); // 자소서 생성 라우터 추가
-app.use("/community", require("./routes/community")); // 커뮤니티 라우터 추가
+app.use("/memo", require("./routes/memo")); // 메모 라우터 추가
 app.use("/list", require("./routes/list")); // 리스트 라우터 추가
 app.use("/mypage", require("./routes/my_page")); // 마이페이지 라우터 추가
 app.use("/qna", require("./routes/qna")); // QnA 라우터 추가
+app.use("/find", require("./routes/findAccount")); // 계정 찾기 라우터 추가
+app.use("/findp", require("./routes/findPassword")); // 비밀번호 재설정 라우터 추가
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

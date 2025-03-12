@@ -5,7 +5,7 @@ const asynchandler = require("express-async-handler");
 router.get(
     "/",
     asynchandler(async (req, res) => {
-        res.status(200).send("Search Page");
+        res.status(200).send("Chat Page");
     })
 );
 

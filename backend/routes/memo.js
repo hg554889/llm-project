@@ -5,14 +5,14 @@ const asynchandler = require("express-async-handler");
 router.get(
     "/",
     asynchandler(async (req, res) => {
-        res.status(200).send("Community Page");
+        res.status(200).send("Memo Page");
     })
 );
 
 router.post(
     "/",
     asynchandler(async (req, res) => {
-        res.status(200).send("Community Page");
+        res.status(200).send("Memo Page Post Request");
     })
 );
 

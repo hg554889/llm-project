@@ -23,12 +23,21 @@ const validatePassword = (password) => {
 
 // 회원가입 라우트
 router.post('/', asyncHandler(async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, confirmPassword } = req.body;
 
     // 기본 입력값 검증
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !confirmPassword) {
         return res.status(400).json({ 
+            success: false,
             message: '모든 필드를 입력해주세요.' 
+        });
+    }
+
+    // 비밀번호 일치 확인
+    if (password !== confirmPassword) {
+        return res.status(400).json({
+            success: false,
+            message: '비밀번호가 일치하지 않습니다.'
         });
     }
 
@@ -36,6 +45,7 @@ router.post('/', asyncHandler(async (req, res) => {
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.isValid) {
         return res.status(400).json({ 
+            success: false,
             message: `비밀번호는 ${passwordValidation.errors.join(', ')}를 포함해야 합니다.` 
         });
     }
@@ -43,7 +53,19 @@ router.post('/', asyncHandler(async (req, res) => {
     // 이메일 중복 체크
     const userExists = await User.findOne({ email });
     if (userExists) {
-        return res.status(400).json({ message: '이미 존재하는 이메일입니다.' });
+        return res.status(400).json({ 
+            success: false,
+            message: '이미 존재하는 이메일입니다.' 
+        });
+    }
+
+    // username 중복 체크
+    const usernameExists = await User.findOne({ username });
+    if (usernameExists) {
+        return res.status(400).json({ 
+            success: false,
+            message: '이미 존재하는 사용자명입니다.' 
+        });
     }
 
     // 비밀번호 해싱
@@ -59,13 +81,19 @@ router.post('/', asyncHandler(async (req, res) => {
 
     if (user) {
         res.status(201).json({
-            _id: user._id,
-            username: user.username,
-            email: user.email,
+            success: true,
+            data: {
+                _id: user._id,
+                username: user.username,
+                email: user.email
+            },
             message: '회원가입이 완료되었습니다.'
         });
     } else {
-        res.status(400).json({ message: '유효하지 않은 사용자 정보입니다.' });
+        res.status(400).json({ 
+            success: false,
+            message: '유효하지 않은 사용자 정보입니다.' 
+        });
     }
 }));
 

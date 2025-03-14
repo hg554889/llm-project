@@ -12,27 +12,32 @@ const validateEmail = (email) => {
 
 // 로그인 라우트
 router.post('/', asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
+    const { email, username, password } = req.body;
 
     // 입력값 검증
-    if (!email || !password) {
+    if ((!email && !username) || !password) {
         return res.status(400).json({
             success: false,
-            message: '이메일과 비밀번호를 모두 입력해주세요.'
-        });
-    }
-
-    // 이메일 형식 검증
-    if (!validateEmail(email)) {
-        return res.status(400).json({
-            success: false,
-            message: '올바른 이메일 형식이 아닙니다.'
+            message: '이메일 또는 사용자명과 비밀번호를 입력해주세요.'
         });
     }
 
     try {
-        // 사용자 찾기
-        const user = await User.findOne({ email });
+        let user;
+
+        // 이메일 또는 사용자명으로 사용자 찾기
+        if (email) {
+            // 이메일 형식 검증
+            if (!validateEmail(email)) {
+                return res.status(400).json({
+                    success: false,
+                    message: '올바른 이메일 형식이 아닙니다.'
+                });
+            }
+            user = await User.findOne({ email });
+        } else {
+            user = await User.findOne({ username });
+        }
 
         if (!user) {
             return res.status(401).json({

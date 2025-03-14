@@ -21,15 +21,15 @@ const validatePassword = (password) => {
     };
 };
 
-// 비밀번호 변경 라우트
+// 비밀번호 변경 라우트 (현재 비밀번호 입력 없이 새 비밀번호로 변경)
 router.post('/', asyncHandler(async (req, res) => {
-    const { username, currentPassword, newPassword } = req.body;
+    const { username, newPassword } = req.body;
 
     // 입력값 검증
-    if (!username || !currentPassword || !newPassword) {
+    if (!username || !newPassword) {
         return res.status(400).json({
             success: false,
-            message: '모든 필드를 입력해주세요.'
+            message: '사용자명과 새 비밀번호를 입력해주세요.'
         });
     }
 
@@ -48,15 +48,6 @@ router.post('/', asyncHandler(async (req, res) => {
         return res.status(404).json({
             success: false,
             message: '사용자를 찾을 수 없습니다.'
-        });
-    }
-
-    // 현재 비밀번호 확인
-    const isMatch = await bcrypt.compare(currentPassword, user.password);
-    if (!isMatch) {
-        return res.status(401).json({
-            success: false,
-            message: '현재 비밀번호가 일치하지 않습니다.'
         });
     }
 

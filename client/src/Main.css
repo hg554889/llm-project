@@ -67,6 +67,13 @@ body {
     margin: 0;
     text-align: center;
   }
+
+  
+.header img{
+  width: 50px;
+  height: auto;
+  border-radius: 20%;
+}
   
 
   .search-container {
@@ -100,12 +107,6 @@ body {
     left: 15px; /* 아이콘을 검색창 왼쪽에 배치 */
     font-size: 20px;
     color: black;
-}
-
-.header img{
-  width: 50px;
-  height: auto;
-  border-radius: 20%;
 }
 
 

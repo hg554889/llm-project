@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: white;
+  }
+
+  .header {
+    position: fixed; /* 항상 상단에 고정 */
+    top: 5px;
+    left: 0;
+    right: 0;
+    min-width: 100vw; /* 최소한 화면 전체 너비 */
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    background-color: rgb(255, 255, 255); 
+    color: #0a0a23;
+    padding: 10px 20px; /* 패딩 추가 */
+    box-sizing: border-box; /* 패딩 포함한 크기 조정 */
+    height: 60px; /* 높이 지정 */
+    z-index: 1000; /* 다른 요소보다 위에 표시 */
+}

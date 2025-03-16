@@ -53,7 +53,7 @@ const Main = () => {
           <h1 onClick={() => navigate('/')}>Code Programming Runner</h1>
           
           <div className='right-section'>
-          <i className="fa-solid fa-user" onClick={() => navigate('/login')}></i>
+          <i className="fa-solid fa-user-plus" onClick={() => navigate('/login')}></i>
           <i class="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
           </div>
         </div>

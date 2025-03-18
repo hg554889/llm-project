@@ -2,17 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import mainlogo from './img/mainlogo.png'; // 이미지 파일 추가
-import './signIn.css'; // CSS 파일 추가
+import './login_temp.css'; // CSS 파일 추가
 
-const SignIn = () => {
+const Login_temp = () => {
     const [message, setMessage] = useState(''); {/*메세지 아래 호출 안해놔서 안나오는게 맞음 */}
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
     const navigate = useNavigate(); // React Router를 사용한 페이지 이동
 
     const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [passwordchk, setPasswordchk] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
   
     // API 호출 (처음 1번 실행)
     useEffect(() => {
@@ -36,7 +35,7 @@ const SignIn = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Sign in with", username, email, password, passwordchk);
+    console.log("Logging in with", username, newPassword, newPasswordConfirm);
   };
 
 
@@ -65,9 +64,10 @@ const SignIn = () => {
         </div>
       </div>
 
-      <div className="signIn-container">
-        <div className="signIn-box">
-          <h2>Create Your Account !</h2>
+      <div className="loginT-container">
+        <div className="loginT-box">
+          <h2>You Log In With Temporary Password!</h2>
+          <h2>Please Change Your Password :)</h2>
 
           <form onSubmit={handleSubmit}>
             <input
@@ -78,43 +78,29 @@ const SignIn = () => {
               required
             />
             <input
-              type="text"
-              placeholder="E-Mail(ID@example.com)"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <input
               type="password"
               placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
               required
             />
             <input
               type="password"
               placeholder="Password Checking"
-              value={passwordchk}
-              onChange={(e) => passwordchk(e.target.value)}
+              value={newPasswordConfirm}
+              onChange={(e) => setNewPasswordConfirm(e.target.value)}
               required
-            />
+              />
 
-            <div className="options">
-            <label>
-                <input type="checkbox" />
-                <span>(필수) 개인정보 취급방침에 대한 안내</span>
-            </label>
-            </div>
-
-            {/*로그인페이지로로*/}
+            {/*로그인인 페이지로로*/}
             <button type="submit" className="continue-btn" onClick={() => navigate('/login')}>
               Continue
             </button>
           </form>
 
-          {/*회원가입 페이지로*/}
-          <a href="/login" className="register-link" onClick={(e) => {e.preventDefault(); navigate('/login');}}>
-            Do You Have Your Own Account? Log in!
+          {/*로그인 페이지로*/}
+          <a href="/signIn" className="register-link" onClick={(e) => {e.preventDefault(); navigate('/login');}}>
+            Back to Log in
           </a>
         </div>
       </div>
@@ -123,4 +109,4 @@ const SignIn = () => {
 };
   
 
-export default SignIn;
+export default Login_temp;

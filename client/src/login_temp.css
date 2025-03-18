@@ -1,11 +1,9 @@
-/* index.css */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: white;
   }
 
-  
   .sidebar {
     position: fixed;
     top: 13%;
@@ -63,62 +61,93 @@ body {
   cursor: pointer;
 }
 
-  .header h1 {
+.header h1 {
     margin: 0;
     text-align: center;
-  }
+}
 
-  
 .header img{
   width: 50px;
   height: auto;
   border-radius: 20%;
 }
-  
 
-  .search-container {
-    position: relative; /* 내부 아이콘을 절대 위치로 배치하기 위해 설정 */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 400px; /* 검색창을 오른쪽으로 이동 */
-    margin-top: 500px; /* 검색창을 아래로 이동 */
-    width: 700px; /* 검색창의 너비 */
-    border: 2px solid rgb(220, 213, 254);
-    border-radius: 25px; /* 둥근 모서리 */
-    background-color: rgb(220, 213, 254);
-    padding: 5px;
+/* 🌟 전체 페이지 중앙 정렬 */
+.loginT-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: white;
 }
 
-/* 검색 입력창 */
-.search-bar {
-    width: 100%; /* 부모(.search-container) 너비에 맞춤 */
-    padding: 10px 15px 10px 50px; /* 왼쪽 공간 확보 (아이콘 위치) */
-    font-size: 16px;
-    border: none; /* 테두리 제거 */
-    border-radius: 25px; /* 둥근 모서리 */
-    outline: none;
-    background: none; /* 부모 배경색 유지 */
+/* 🌟로그인 박스 스타일 */
+.loginT-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 450px;
 }
 
-/* 검색창 안의 돋보기 아이콘 */
-.search-container i {
-    position: absolute;
-    left: 15px; /* 아이콘을 검색창 왼쪽에 배치 */
-    font-size: 20px;
-    color: black;
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  padding-bottom: 10px;
 }
 
 
-  .content {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* 입력 필드 스타일 */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+
+/* 로그인 버튼 스타일 */
+.continue-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  color: white;
+  background-color:  rgb(220, 213, 254);
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.continue-btn:hover {
+  background-color: #bcbcbc;
+}
+
+/* 로그인 링크 */
+.register-link {
+  display: block;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #888;
+  font-weight: bold;
+}
+
+.register-link:hover {
+  color: #555;
+}
+
+/* 🌟 반응형 디자인 (작은 화면에서도 보기 좋게) */
+@media (max-width: 400px) {
+  .login-box {
+    width: 90%;
+    padding: 20px;
   }
+}
 
-  
-  .content h1 {
-    color: black;
-  }
-  
+

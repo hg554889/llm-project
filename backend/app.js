@@ -7,7 +7,6 @@ const connectDB = require('./config/db');
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(express.static(path.join(__dirname, 'public'))); // 정적 파일 서빙
 app.use(cors());
 app.use(express.json());  // JSON 파싱을 위한 미들웨어 추가
 connectDB();
@@ -15,7 +14,6 @@ connectDB();
 app.use("/", require("./routes/main")); // 메인 라우터 추가
 app.use("/login", require("./routes/login")); // 로그인 라우터 추가
 app.use("/register", require("./routes/register")); // 회원가입 라우터 추가
-app.use("/chat", require("./routes/chat")); // 채팅 라우터 추가
 app.use("/ai", require("./routes/ai")); // 자소서 생성 라우터 추가
 app.use("/memo", require("./routes/memo")); // 메모 라우터 추가
 app.use("/list", require("./routes/list")); // 리스트 라우터 추가

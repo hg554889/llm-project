@@ -1,0 +1,86 @@
+.profile-wrapper {
+    position: relative;
+}
+
+  /* 회색 동그란 아이콘 */
+.profile-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+  /* 드롭다운 전체 박스 */
+.profile-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 220px;
+    background-color: rgb(233, 231, 250);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    border-radius: 12px;
+    z-index: 999;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+  /* fadeIn 애니메이션 */
+@keyframes fadeIn {
+    from {
+    opacity: 0;
+    transform: translateY(-5px);
+    }
+    to {
+    opacity: 1;
+    transform: translateY(0);
+    }
+}
+
+  /* 상단 프로필 영역 */
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: lightgray;
+    margin-right: 10px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-name {
+    font-weight: bold;
+    margin: 0;
+}
+
+.profile-email {
+    font-size: 12px;
+    color: gray;
+    margin: 2px 0 0 0;
+}
+
+  /* 메뉴 리스트 */
+.profile-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profile-menu li {
+    padding: 8px 0;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.profile-menu li:hover {
+    text-decoration: underline;
+}

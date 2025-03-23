@@ -14,7 +14,7 @@ const Main = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/message');
+        const response = await axios.get('http://localhost:3001/');
         setMessage(response.data.message);
       } catch (error) {
         console.error('API 호출 오류:', error);

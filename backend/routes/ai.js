@@ -6,7 +6,7 @@ require("dotenv").config();
 
 // Flask 서버 URL들 설정
 const FLASK_SERVER_URL = process.env.FLASK_SERVER_URL || "http://localhost:5000";
-const BACKUP_AI_SERVER_URL = "http://localhost:6000";
+const BACKUP_AI_SERVER_URL = process.env.BACKUP_AI_SERVER_URL || "http://localhost:6000";
 
 // /generate 엔드포인트 수정
 router.post(

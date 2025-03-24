@@ -10,6 +10,7 @@ import EnvirPage from './envir.js';  // 환경 설정 페이지
 import UserMainPage from './UserMain.js';  // 유저 메인 페이지
 import MyPage from './MyPage.js';    // 마이 페이지(로그인 되면 아이콘 바뀌는데)
 
+
 const Router = () => {
   return (
     <Routes>

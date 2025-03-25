@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import "./SavedQuestion.css";
 
 const SavedQuestion = () => {
     const [showSidebar, setShowSidebar] = useState(true);
-
+    const navigate = useNavigate(); 
     const toggleSidebar = () => setShowSidebar(!showSidebar);
 
     return (
@@ -21,10 +22,11 @@ const SavedQuestion = () => {
                 <p className="side-name">Aurora &gt;</p>
                 <p className="side-email">gudeg0702@gmail.com</p>
                 <ul className="side-menu">
-                <li>My Page</li>
-                <li>Saved Questions</li>
-                <li>Saved Link</li>
+                <li onClick={()=>navigate('/myPage')}>My Page</li>
+                <li onClick={()=>navigate('/savedQ')}>Saved Questions</li>
+                <li onClick={()=> navigate('/savedLink')}>Saved Link</li>
                 <li>Note</li>
+                <li onClick={()=>('/')}>Log Out</li>
                 </ul>
             </div>
             )}

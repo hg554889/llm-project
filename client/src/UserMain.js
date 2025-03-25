@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 //import ReactDOM from 'react-dom/client';
 import axios from 'axios';
 import mainlogo from './img/mainlogo.png'; // 이미지 파일 추가
@@ -70,10 +71,10 @@ const UserMain = () => {
 
           <h1 onClick={() => navigate('/')}>Code Programming Runner</h1>
           
-          <div className='right-section'>
+          <div className='right-section' >
           <i className="fa-solid fa-user" onClick={toggleDropdown}></i>
           {isOpen && (
-            <div className="profile-dropdown">
+            <div className="profile-dropdown" ref={dropdownRef}>
             <div className="profile-header">
                 <div className="profile-circle" />
                 <div className="profile-info">
@@ -83,11 +84,11 @@ const UserMain = () => {
             </div>
 
             <ul className="profile-menu">
-                <li onClick={() => navigate('./myPage')}>My Page</li>
-                <li onClick={() => navigate('./savedQ')}>Saved Questions</li>
-                <li onClick={() => navigate('./savedLink')}>Saved Links</li>
-                <li>Customer Service</li>
-                <li onClick={()=> navigate('/')}>Log out</li>
+                <li onClick={()=>navigate('/myPage')}>My Page</li>
+                <li onClick={()=>navigate('/savedQ')}>Saved Questions</li>
+                <li onClick={()=>navigate('savedLink')}>Saved Links</li>
+                <li>Note</li>
+                <li onClick={()=>navigate('/')}>Log out</li>
             </ul>
             </div>
         )}

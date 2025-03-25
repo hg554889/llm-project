@@ -1,7 +1,10 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import "./SavedLink.css";
 
 const SavedLink = () => {
+     const navigate = useNavigate(); 
+
     return (
         <div className="savedlink-container">
         <header className="savedlink-header">
@@ -16,10 +19,11 @@ const SavedLink = () => {
             <p className="side-name">Aurora &gt;</p>
             <p className="side-email">gudeg0702@gmail.com</p>
             <ul className="side-menu">
-                <li>My Page</li>
-                <li>Saved Questions</li>
-                <li>Saved Link</li>
+                <li onClick={()=>navigate('/myPage')}>My Page</li>
+                <li onClick={()=>navigate('/savedQ')}>Saved Questions</li>
+                <li onClick={()=>navigate('/savedLink')}>Saved Link</li>
                 <li>Note</li>
+                <li onClick={()=>navigate('/')}>Log Out</li>
             </ul>
             </div>
 

@@ -1,86 +1,168 @@
-.profile-wrapper {
-    position: relative;
-}
+/* index.css */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: white;
+  }
 
-  /* 회색 동그란 아이콘 */
-.profile-icon {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: lightgray;
-    cursor: pointer;
-}
+  
+  .sidebar {
+    position: fixed;
+    top: 13%;
+    left: -250px; /* 초기 위치는 화면 밖 */
+    width: 250px;
+    height: 75%;
+    background-color: rgb(220, 213, 254);
+    color: green;
+    padding: 20px;
+    transition: left 0.3s ease; /* 애니메이션 */
+    border-top-right-radius: 20px;  /* 오른쪽 상단 둥글게 */
+    border-bottom-right-radius: 20px;  /* 오른쪽 하단 둥글게 */
+  }
 
-  /* 드롭다운 전체 박스 */
-.profile-dropdown {
-    position: absolute;
-    top: 50px;
+  .sidebar.open {
+    left: 0; /* 사이드바가 열리면 화면에 표시 */
+  }
+
+  .header {
+    position: fixed; /* 항상 상단에 고정 */
+    top: 5px;
+    left: 0;
     right: 0;
-    width: 220px;
-    background-color: rgb(233, 231, 250);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    border-radius: 12px;
-    z-index: 999;
-    animation: fadeIn 0.2s ease-in-out;
-}
-
-  /* fadeIn 애니메이션 */
-@keyframes fadeIn {
-    from {
-    opacity: 0;
-    transform: translateY(-5px);
-    }
-    to {
-    opacity: 1;
-    transform: translateY(0);
-    }
-}
-
-  /* 상단 프로필 영역 */
-.profile-header {
+    min-width: 100vw; /* 최소한 화면 전체 너비 */
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    justify-content: space-between; 
+    background-color: rgb(255, 255, 255); 
+    color: #0a0a23;
+    padding: 10px 20px; /* 패딩 추가 */
+    box-sizing: border-box; /* 패딩 포함한 크기 조정 */
+    height: 60px; /* 높이 지정 */
+    z-index: 1000; /* 다른 요소보다 위에 표시 */
+}
+
+/* 왼쪽 섹션 스타일 */
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 아이콘과 텍스트 간격 */
+  margin-left: 10px; /* 왼쪽 여백 */
+
+}
+
+/* 오른쪽 섹션 스타일 */
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 아이콘 간격 */
+  margin-right: 10px; /* 오른쪽 여백 */
+}
+
+/* 아이콘 스타일 (조정 가능) */
+.header i {
+  font-size: 30px;
+  cursor: pointer;
+}
+
+  .header h1 {
+    margin: 0;
+    text-align: center;
+  }
+
+  
+.header img{
+  width: 50px;
+  height: auto;
+  border-radius: 20%;
+}
+
+/**/
+.mypage-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 70px;
+  padding: 120px 40px 60px 120px;
+}
+
+.profile-card,
+.info-card {
+  background-color: #dad8f9;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 250px;
+  
+}
+
+.info-card {
+  width: 600px;
+  height: 500px;
+
 }
 
 .profile-circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: lightgray;
-    margin-right: 10px;
+  width: 50px;
+  height: 50px;
+  background-color: lightgray;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  flex-shrink: 0;
 }
-
 .profile-info {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .profile-name {
-    font-weight: bold;
-    margin: 0;
+  font-weight: bold;
+  margin: 0;
+  white-space: nowrap;
 }
 
 .profile-email {
-    font-size: 12px;
-    color: gray;
-    margin: 2px 0 0 0;
+  font-size: 12px;
+  color: gray;
+  margin: 2px 0 0 0;
+  padding-bottom: 7px;
 }
 
-  /* 메뉴 리스트 */
+/* 메뉴 리스트 */
 .profile-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .profile-menu li {
-    padding: 8px 0;
-    font-size: 14px;
-    cursor: pointer;
+  padding: 8px 0;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .profile-menu li:hover {
-    text-decoration: underline;
+  text-decoration: underline;
+}
+
+.profile-note {
+  width: 100%;
+  height: 40px;
+  border-radius: 6px;
+  border: none;
+  padding: 6px;
+  font-size: 13px;
+  resize: none;
+  background-color: white;
+}
+
+.info-card p {
+  margin: 15px 0;
+  font-size: 16px;
+}
+
+.tag {
+  display: inline-block;
+  margin-right: 8px;
+  color: #6c63ff;
+  font-weight: bold;
 }

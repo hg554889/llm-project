@@ -9,17 +9,25 @@ const Note = () => {
     const [isGridView, setIsGridView] = useState(true);
 
     const toggleSidebar = () => setShowSidebar(!showSidebar);
-    const toggleView = () => setIsGridView(!isGridView);
+
 
     return (
         <div className="note-page-container">
-        <header className="note-header">
-            <div className="menu-toggle" onClick={toggleSidebar}>☰</div>
-            <h1>Code Programming Runner</h1>
-            <div className="view-toggle" onClick={toggleView}>
-            {isGridView ? "☰" : "▦"}
-            </div>
-        </header>
+         <div className="header">
+                          <div className='left-section'>
+                          <i className="fa-sharp fa-solid fa-bars" onClick={toggleSidebar}></i>
+                           <img src={mainlogo} alt='logo' />
+                          <h1 >CPR</h1>
+                          </div>
+                
+                          <h1 onClick={() => navigate('/userMain')}>Code Programming Runner</h1> {/* 페이지 어디로 옮겨야 되는지 모르겠음 */}
+                        
+                          <div className='right-section'>
+                          <i className="fa-solid fa-user" onClick={() => navigate('')}></i>  
+                          {/* 페이지 어디로 옮겨야 되는지 모르겠음 */}
+                          <i class="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
+                          </div>
+                        </div>
 
         <div className="note-content">
             {showSidebar && (
@@ -32,6 +40,7 @@ const Note = () => {
                 <li onClick={()=>navigate('/savedQ')}>Saved Questions</li>
                 <li onClick={()=>navigate('/savedLink')}>Saved Link</li>
                 <li onClick={()=>navigate('/note')}>Note</li>
+                <textarea className="profile-note" placeholder="Write a note..." />
                 <li onClick={()=>navigate('/')}>Log Out</li>
                 </ul>
             </div>

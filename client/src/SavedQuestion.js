@@ -17,7 +17,7 @@ const SavedQuestion = () => {
                         <h1 >CPR</h1>
                         </div>
               
-                        <h1 onClick={() => navigate('')}>Code Programming Runner</h1> {/* 페이지 어디로 옮겨야 되는지 모르겠음 */}
+                        <h1 onClick={() => navigate('/userMain')}>Code Programming Runner</h1>
                       
                         <div className='right-section'>
                         <i className="fa-solid fa-user" onClick={() => navigate('')}></i>  

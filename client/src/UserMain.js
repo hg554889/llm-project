@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 //import ReactDOM from 'react-dom/client';
 import axios from 'axios';
@@ -10,7 +10,9 @@ const UserMain = () => {
   const [message, setMessage] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
   const navigate = useNavigate(); // React Router를 사용한 페이지 이동
-
+  
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,11 +27,27 @@ const UserMain = () => {
     fetchData();
   }, []);
 
+      useEffect(() => {
+          const handleClickOutside = (event) => {
+          if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+              setIsOpen(false);
+          }
+          };
+          document.addEventListener("mousedown", handleClickOutside);
+          return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+          };
+      }, []);
+
 
   // 사이드바 열기/닫기 함수
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  const toggleDropdown = () => {
+    setIsOpen((prev) => !prev);
+};
 
 
 
@@ -53,7 +71,26 @@ const UserMain = () => {
           <h1 onClick={() => navigate('/')}>Code Programming Runner</h1>
           
           <div className='right-section'>
-          <i className="fa-solid fa-user" onClick={() => navigate('/myPage')}></i>
+          <i className="fa-solid fa-user" onClick={toggleDropdown}></i>
+          {isOpen && (
+            <div className="profile-dropdown">
+            <div className="profile-header">
+                <div className="profile-circle" />
+                <div className="profile-info">
+                <p className="profile-name">Aurora &gt;</p>
+                <p className="profile-email">gudeg0702@gmail.com</p>
+                </div>
+            </div>
+
+            <ul className="profile-menu">
+                <li onClick={() => navigate('./myPage')}>My Page</li>
+                <li onClick={() => navigate('./savedQ')}>Saved Questions</li>
+                <li onClick={() => navigate('./savedLink')}>Saved Links</li>
+                <li>Customer Service</li>
+                <li onClick={()=> navigate('/')}>Log out</li>
+            </ul>
+            </div>
+        )}
           <i class="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
           </div>
         </div>

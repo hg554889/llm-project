@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import mainlogo from './img/mainlogo.png'; // 이미지 파일 추가
 import "./MyPage.css"; // CSS 분리
 
 const Mypage = () => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const navigate = useNavigate(); // React Router를 사용한 페이지 이동
 
     // 바깥 클릭 시 드롭다운 닫기
     useEffect(() => {
@@ -37,10 +41,11 @@ const Mypage = () => {
             </div>
 
             <ul className="profile-menu">
-                <li>My Page</li>
-                <li>Saved Questions</li>
-                <li>Saved Links</li>
+                <li onClick={() => navigate('./myPage')}>My Page</li>
+                <li onClick={() => navigate('./savedQ')}>Saved Questions</li>
+                <li onClick={() => navigate('./savedLink')}>Saved Links</li>
                 <li>Customer Service</li>
+                <li>Log out</li>
             </ul>
             </div>
         )}

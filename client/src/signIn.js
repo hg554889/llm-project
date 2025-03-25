@@ -95,7 +95,7 @@ const SignIn = () => {
               type="password"
               placeholder="Password Checking"
               value={passwordchk}
-              onChange={(e) => passwordchk(e.target.value)}
+              onChange={(e) => setPasswordchk(e.target.value)}
               required
             />
 
@@ -112,7 +112,7 @@ const SignIn = () => {
             </button>
           </form>
 
-          {/*회원가입 페이지로*/}
+          {/*로그인 페이지로*/}
           <a href="/login" className="register-link" onClick={(e) => {e.preventDefault(); navigate('/login');}}>
             Do You Have Your Own Account? Log in!
           </a>

@@ -13,7 +13,7 @@ import UserMainPage from './UserMain.js';  // 유저 메인 페이지
 import MyPage from './MyPage.js';    // 마이 페이지(로그인 되면 아이콘 바뀌는데)
 import SavedQ from'./SavedQuestion.js' //저장된 질문 페이지
 import SavedLink from './SavedLink.js' //저장된 링크 페이지
-
+import Note from './Note.js' //노트 페이지
 
 const Router = () => {
   return (
@@ -29,6 +29,7 @@ const Router = () => {
       <Route path="/myPage" element={<MyPage />} />
       <Route path="/savedQ" element={<SavedQ />} />
       <Route path="/savedLink" element={<SavedLink />} />
+      <Route path="/note" element={<Note />} />
     </Routes>
   );
 }

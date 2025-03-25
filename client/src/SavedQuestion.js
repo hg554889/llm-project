@@ -36,7 +36,7 @@ const SavedQuestion = () => {
                 <li onClick={()=>navigate('/myPage')}>My Page</li>
                 <li onClick={()=>navigate('/savedQ')}>Saved Questions</li>
                 <li onClick={()=>navigate('/savedLink')}>Saved Link</li>
-                <li>Note</li>
+                <li onClick={()=>navigate('/note')}>Note</li>
                 <textarea className="profile-note" placeholder="Write a note..." />
                 <li onClick={()=>navigate('/')}>Log Out</li>
                 </ul>

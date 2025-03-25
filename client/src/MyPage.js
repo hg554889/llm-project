@@ -15,8 +15,6 @@ const Mypage = () => {
 
     return (
          <div className="container">
-        
-        
                 <div className="header">
                   <div className='left-section'>
                   <i className="fa-sharp fa-solid fa-bars"></i>
@@ -45,7 +43,7 @@ const Mypage = () => {
       <li onClick={() => navigate('/myPage')}>My Page</li>
       <li onClick={() => navigate('/savedQ')}>Saved Questions</li>
       <li onClick={() => navigate('/savedLink')}>Saved Links</li>
-      <li>Note</li>
+      <li onClick={()=>  navigate ('/note')}>Note</li>
       <textarea className="profile-note" placeholder="Write a note..." />
       <li onClick={() => navigate('/')}>Log out</li>
     </ul>

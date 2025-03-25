@@ -86,8 +86,8 @@ const UserMain = () => {
             <ul className="profile-menu">
                 <li onClick={()=>navigate('/myPage')}>My Page</li>
                 <li onClick={()=>navigate('/savedQ')}>Saved Questions</li>
-                <li onClick={()=>navigate('savedLink')}>Saved Links</li>
-                <li>Note</li>
+                <li onClick={()=>navigate('/savedLink')}>Saved Links</li>
+                <li onClick={()=>navigate('/note')}>Note</li>
                 <li onClick={()=>navigate('/')}>Log out</li>
             </ul>
             </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
+import mainlogo from './img/mainlogo.png'; 
 import "./SavedLink.css";
 
 const SavedLink = () => {
@@ -7,11 +8,21 @@ const SavedLink = () => {
 
     return (
         <div className="savedlink-container">
-        <header className="savedlink-header">
-            <div className="menu-toggle">☰</div>
-            <h1>Code Programming Runner</h1>
-            <div className="profile-dot"></div>
-        </header>
+         <div className="header">
+                          <div className='left-section'>
+                          <i className="fa-sharp fa-solid fa-bars"></i>
+                           <img src={mainlogo} alt='logo' />
+                          <h1 >CPR</h1>
+                          </div>
+                
+                          <h1 onClick={() => navigate('')}>Code Programming Runner</h1> {/* 페이지 어디로 옮겨야 되는지 모르겠음 */}
+                        
+                          <div className='right-section'>
+                          <i className="fa-solid fa-user" onClick={() => navigate('')}></i>  
+                          {/* 페이지 어디로 옮겨야 되는지 모르겠음 */}
+                          <i class="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
+                          </div>
+                        </div>
 
         <div className="savedlink-content">
             <div className="savedlink-sidebar">
@@ -22,7 +33,8 @@ const SavedLink = () => {
                 <li onClick={()=>navigate('/myPage')}>My Page</li>
                 <li onClick={()=>navigate('/savedQ')}>Saved Questions</li>
                 <li onClick={()=>navigate('/savedLink')}>Saved Link</li>
-                <li>Note</li>
+                <li onClick={()=>navigate('/note')}>Note</li>
+                <textarea className="profile-note" placeholder="Write a note..." />
                 <li onClick={()=>navigate('/')}>Log Out</li>
             </ul>
             </div>

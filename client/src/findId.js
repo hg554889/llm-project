@@ -75,7 +75,7 @@ const FindId = () => {
             <button
               className={activeTab === 'findId' ? 'active' : ''}
               onClick={() => {setActiveTab('findId'); navigate('/findId'); }}>
-              Find ID
+              Find User Name
             </button>
             <button
               className={activeTab === 'findPwd' ? 'active' : ''}

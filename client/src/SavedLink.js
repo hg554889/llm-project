@@ -40,7 +40,7 @@ const SavedLink = () => {
             </div>
 
             <div className="savedlink-main">
-            <h2 className="savedlink-title">Saved Link</h2>
+            <h2 className="savedlink-title">Saved Links</h2>
             <div className="link-item">
                 <strong>Exemple.com</strong>
                 <hr />

@@ -62,7 +62,7 @@ const FindPwd = () => {
 
       <div className="findInfo-container">
         <div className="findInfo-box">
-          <h2>Find Your ID / Password</h2>
+          <h2>Find User Name / Password</h2>
 
           {/* 🔹 탭 버튼 */}
           <div className="find-tabs">

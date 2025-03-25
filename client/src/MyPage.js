@@ -52,7 +52,7 @@ const Mypage = () => {
 
   {/* 오른쪽 정보 카드 */}
   <div className="info-card">
-    <p><strong>ID</strong><br />Aurora</p>
+    <p><strong>User Name</strong><br />Aurora</p>
     <p><strong>E-Mail</strong><br />gudeg0702@gmail.com</p>
     <p><strong>Password</strong><br />_</p>
     <p><strong>My interests</strong><br />

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import mainlogo from './img/mainlogo.png'; // 이미지 파일 추가
 import "./SavedQuestion.css";
 
 const SavedQuestion = () => {
@@ -9,11 +10,21 @@ const SavedQuestion = () => {
 
     return (
         <div className="saved-question-container">
-        <header className="saved-question-header">
-            <div className="menu-toggle" onClick={toggleSidebar}>☰</div>
-            <h1>Code Programming Runner</h1>
-            <div className="profile-dot"></div>
-        </header>
+      <div className="header">
+                        <div className='left-section'>
+                        <i className="fa-sharp fa-solid fa-bars" onClick={toggleSidebar}></i>
+                         <img src={mainlogo} alt='logo' />
+                        <h1 >CPR</h1>
+                        </div>
+              
+                        <h1 onClick={() => navigate('')}>Code Programming Runner</h1> {/* 페이지 어디로 옮겨야 되는지 모르겠음 */}
+                      
+                        <div className='right-section'>
+                        <i className="fa-solid fa-user" onClick={() => navigate('')}></i>  
+                        {/* 페이지 어디로 옮겨야 되는지 모르겠음 */}
+                        <i class="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
+                        </div>
+                      </div>
 
         <div className="saved-question-content">
             {showSidebar && (
@@ -24,9 +35,10 @@ const SavedQuestion = () => {
                 <ul className="side-menu">
                 <li onClick={()=>navigate('/myPage')}>My Page</li>
                 <li onClick={()=>navigate('/savedQ')}>Saved Questions</li>
-                <li onClick={()=> navigate('/savedLink')}>Saved Link</li>
+                <li onClick={()=>navigate('/savedLink')}>Saved Link</li>
                 <li>Note</li>
-                <li onClick={()=>('/')}>Log Out</li>
+                <textarea className="profile-note" placeholder="Write a note..." />
+                <li onClick={()=>navigate('/')}>Log Out</li>
                 </ul>
             </div>
             )}

@@ -20,8 +20,8 @@ const Mypage = () => {
                 <div className="header">
                   <div className='left-section'>
                   <i className="fa-sharp fa-solid fa-bars"></i>
-                  <img src={mainlogo} alt='logo' />
-                  <h1>CPR</h1>
+                   <img src={mainlogo} alt='logo' />
+                  <h1 >CPR</h1>
                   </div>
         
                   <h1 onClick={() => navigate('')}>Code Programming Runner</h1> {/* 페이지 어디로 옮겨야 되는지 모르겠음 */}

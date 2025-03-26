@@ -237,3 +237,8 @@ body {
     }
   }
   
+/* 오류 팝업에 추가적인 스타일이 필요하다면 여기에 추가 */
+.error-popup .popup-content {
+  border-top: 4px solid #ff3333;
+}
+  

@@ -11,27 +11,10 @@ const Main = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
   const navigate = useNavigate(); // React Router를 사용한 페이지 이동
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:3001/');
-        setMessage(response.data.message);
-      } catch (error) {
-        console.error('API 호출 오류:', error);
-        setMessage('API 호출 실패');
-      }
-    };
-
-    fetchData();
-  }, []);
-
-
   // 사이드바 열기/닫기 함수
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
-
 
   return (
     <div className="container">

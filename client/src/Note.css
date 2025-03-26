@@ -1,78 +1,71 @@
-/* index.css */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: white;
-  }
-
-
-  .header {
-    position: fixed; /* 항상 상단에 고정 */
-    top: 5px;
-    left: 0;
-    right: 0;
-    min-width: 100vw; /* 최소한 화면 전체 너비 */
-    display: flex;
-    align-items: center;
-    justify-content: space-between; 
-    background-color: rgb(255, 255, 255); 
-    color: #0a0a23;
-    padding: 10px 20px; /* 패딩 추가 */
-    box-sizing: border-box; /* 패딩 포함한 크기 조정 */
-    height: 60px; /* 높이 지정 */
-    z-index: 1000; /* 다른 요소보다 위에 표시 */
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: white;
 }
 
-/* 왼쪽 섹션 스타일 */
+.header {
+  position: fixed;
+  top: 5px;
+  left: 0;
+  right: 0;
+  min-width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(255, 255, 255);
+  color: #0a0a23;
+  padding: 10px 20px;
+  box-sizing: border-box;
+  height: 60px;
+  z-index: 1000;
+}
+
 .left-section {
   display: flex;
   align-items: center;
-  gap: 10px; /* 아이콘과 텍스트 간격 */
-  margin-left: 10px; /* 왼쪽 여백 */
-
+  gap: 10px;
+  margin-left: 10px;
 }
 
-/* 오른쪽 섹션 스타일 */
 .right-section {
   display: flex;
   align-items: center;
-  gap: 10px; /* 아이콘 간격 */
-  margin-right: 10px; /* 오른쪽 여백 */
+  gap: 10px;
+  margin-right: 10px;
 }
 
-/* 아이콘 스타일 (조정 가능) */
 .header i {
   font-size: 30px;
   cursor: pointer;
 }
 
-  .header h1 {
-    margin: 0;
-    text-align: center;
-  }
+.header h1 {
+  margin: 0;
+  text-align: center;
+}
 
-  
-.header img{
+.header img {
   width: 50px;
   height: auto;
   border-radius: 20%;
 }
 
 .menu-toggle {
-    font-size: 24px;
-    cursor: pointer;
+  font-size: 24px;
+  cursor: pointer;
 }
 
 .note-content {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 70px;
-    padding: 120px 40px 60px 120px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 70px;
+  padding: 120px 40px 60px 120px;
 }
 
 .note-sidebar {
-    background-color: #dad8f9;
+  background-color: #dad8f9;
   padding: 20px;
   border-radius: 16px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -80,84 +73,104 @@ body {
 }
 
 .profile-note {
-    width: 100%;
-    height: 40px;
-    border-radius: 6px;
-    border: none;
-    padding: 6px;
-    font-size: 13px;
-    resize: none;
-    background-color: white;
-  }
-  
+  width: 100%;
+  height: 40px;
+  border-radius: 6px;
+  border: none;
+  padding: 6px;
+  font-size: 13px;
+  resize: none;
+  background-color: white;
+}
 
 .profile-circle-large {
-    width: 50px;
-    height: 50px;
-    background-color: lightgray;
-    border-radius: 50%;
-    margin-bottom: 10px;
-    flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  background-color: lightgray;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  flex-shrink: 0;
 }
 
 .side-name {
-    font-weight: bold;
-    margin-bottom: 5px;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .side-email {
-    font-size: 12px;
-    color: gray;
-    margin-bottom: 15px;
+  font-size: 12px;
+  color: gray;
+  margin-bottom: 15px;
 }
 
 .side-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .side-menu li {
-    padding: 6px 0;
-    font-size: 14px;
-    cursor: pointer;
+  padding: 6px 0;
+  font-size: 14px;
+  cursor: pointer;
 }
 
 .side-menu li:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .note-main {
-    flex: 1;
+  flex: 1;
+}
+
+.note-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .note-title {
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 30px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.add-note-button {
+  background-color: #4a47a3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-note-button:hover {
+  background-color: #3734a0;
 }
 
 /* Grid View */
 .note-grid {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 /* List View */
 .note-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .note-card {
-    background-color: rgb(220, 220, 250);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    font-weight: bold;
-    text-align: center;
-    width: 200px;
+  background-color: rgb(220, 220, 250);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-weight: bold;
+  text-align: center;
+  width: 200px;
 }

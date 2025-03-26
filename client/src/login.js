@@ -11,30 +11,93 @@ const Login = () => {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지 상태 추가
+    const [showError, setShowError] = useState(false); // 에러 표시 상태 추가
   
-    // API 호출 (처음 1번 실행)
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get('http://localhost:3001/api/message');
-          setMessage(response.data.message);
-        } catch (error) {
-          console.error('API 호출 오류:', error);
-          setMessage('API 호출 실패');
-        }
-      };
-
-      fetchData();
-    }, []);
-
-      // 사이드바 열기/닫기 함수
+    // 사이드바 열기/닫기 함수
     const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleSubmit = (e) => {
+  // 하드코딩된 테스트 로그인 함수 (임시)
+  const handleTestLogin = () => {
+    // 테스트 계정으로 로그인
+    const testEmail = "test@example.com";
+    localStorage.setItem('userEmail', testEmail);
+    navigate('/userMain');
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Logging in with", username, password);
+    setShowError(false);
+    
+    if (!username || !password) {
+      setErrorMessage('사용자 이름/이메일과 비밀번호를 모두 입력해주세요.');
+      setShowError(true);
+      return;
+    }
+    
+    try {
+      // 입력된 값이 이메일 형식인지 확인
+      const isEmail = username.includes('@');
+      
+      // 요청 데이터 구성
+      const loginData = {
+        ...(isEmail ? { email: username } : { username }),
+        password
+      };
+      
+      console.log('요청 데이터:', loginData);
+      
+      // CORS 오류 확인을 위한 옵션 설정
+      const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: false
+      };
+      
+      // 서버에 로그인 요청
+      const response = await axios.post(
+        'http://localhost:3001/login',
+        loginData,
+        config
+      );
+      
+      console.log('서버 응답:', response.data);
+      
+      if (response.data.success) {
+        // 로그인 성공
+        const userEmail = response.data.user.email;
+        localStorage.setItem('userEmail', userEmail);
+        navigate('/userMain');
+      } else {
+        // 서버에서 성공하지 않은 응답
+        setErrorMessage(response.data.message || '로그인에 실패했습니다.');
+        setShowError(true);
+      }
+    } catch (error) {
+      console.error('로그인 오류:', error);
+      
+      // 서버 응답이 있는 경우
+      if (error.response) {
+        console.log('서버 응답 오류:', error.response.data);
+        setErrorMessage(error.response.data.message || '로그인에 실패했습니다.');
+      } else if (error.request) {
+        console.log('서버 요청 오류:', error.request);
+        setErrorMessage('서버에 연결할 수 없습니다. 서버가 실행 중인지 확인하세요.');
+      } else {
+        console.log('요청 오류:', error.message);
+        setErrorMessage('요청 중 오류가 발생했습니다.');
+      }
+      
+      setShowError(true);
+      
+      // 개발 테스트용 - 임시 테스트 로그인 기능 추가
+      if (username === "test@example.com" && password === "test123") {
+        handleTestLogin();
+      }
+    }
   };
 
 
@@ -88,11 +151,34 @@ const Login = () => {
               <a href="/findInfo" onClick={(e) => {e.preventDefault(); navigate('/findId');}}>Find ID/Password</a>
             </div>
 
-            {/*유저 페이지로로*/}
-            <button type="submit" className="continue-btn" onClick={() => navigate('/userMain')}>
+            {/* 오류 메시지 표시 */}
+            {showError && (
+              <div className="error-message">
+                {errorMessage}
+              </div>
+            )}
+
+            {/* 버튼에서 navigate 직접 호출 제거 - form 제출 시 handleSubmit에서 처리 */}
+            <button type="submit" className="continue-btn">
               Continue
             </button>
           </form>
+
+          {/* 개발 테스트용 임시 로그인 버튼 */}
+          <button 
+            onClick={handleTestLogin}
+            style={{
+              marginTop: '10px',
+              padding: '8px 16px',
+              backgroundColor: '#999',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            테스트 계정으로 로그인 (개발용)
+          </button>
 
           {/*회원가입 페이지로*/}
           <a href="/signIn" className="register-link" onClick={(e) => {e.preventDefault(); navigate('/signIn');}}>

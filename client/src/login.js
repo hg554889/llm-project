@@ -19,14 +19,6 @@ const Login = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // 하드코딩된 테스트 로그인 함수 (임시)
-  const handleTestLogin = () => {
-    // 테스트 계정으로 로그인
-    const testEmail = "test@example.com";
-    localStorage.setItem('userEmail', testEmail);
-    navigate('/userMain');
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setShowError(false);
@@ -92,11 +84,6 @@ const Login = () => {
       }
       
       setShowError(true);
-      
-      // 개발 테스트용 - 임시 테스트 로그인 기능 추가
-      if (username === "test@example.com" && password === "test123") {
-        handleTestLogin();
-      }
     }
   };
 
@@ -163,22 +150,6 @@ const Login = () => {
               Continue
             </button>
           </form>
-
-          {/* 개발 테스트용 임시 로그인 버튼 */}
-          <button 
-            onClick={handleTestLogin}
-            style={{
-              marginTop: '10px',
-              padding: '8px 16px',
-              backgroundColor: '#999',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            테스트 계정으로 로그인 (개발용)
-          </button>
 
           {/*회원가입 페이지로*/}
           <a href="/signIn" className="register-link" onClick={(e) => {e.preventDefault(); navigate('/signIn');}}>

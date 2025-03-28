@@ -29,6 +29,10 @@ app.use("/qna", require("./routes/qna")); // QnA 라우터 추가
 app.use("/search", require("./routes/findAccount")); // 계정 찾기 라우터
 app.use("/findp", require("./routes/findPassword")); // 비밀번호 재설정 라우터 추가
 app.use("/userMain", require("./routes/userMain")); // 유저 메인 라우터 추가
+app.use("/chatHistory", require("./routes/chatHistory")); // 채팅 기록 라우터 추가
+
+const chatHistoryRouter = require('./routes/chatHistory');
+app.use('/chat', chatHistoryRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

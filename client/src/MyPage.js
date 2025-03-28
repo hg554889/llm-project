@@ -6,7 +6,6 @@ import "./MyPage.css"; // CSS 분리
 
 const Mypage = () => {
     const navigate = useNavigate(); // React Router를 사용한 페이지 이동
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [userData, setUserData] = useState({
       username: '',
       email: ''
@@ -14,6 +13,23 @@ const Mypage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [note, setNote] = useState('');
+    const [interests, setInterests] = useState([]);
+    const [isEditingInterests, setIsEditingInterests] = useState(false);
+
+    const availableInterests = [
+        "Python", "Java", "JavaScript", "C/C++", "Ruby",
+        "Algorithm", "Data Structure", "Web Development",
+        "Machine Learning", "Database", "Mobile Development",
+        "Game Dev", "DevOps", "Security"
+    ];
+
+    const handleInterestToggle = (interest) => {
+        setInterests(prev => 
+            prev.includes(interest)
+                ? prev.filter(i => i !== interest)
+                : [...prev, interest]
+        );
+    };
 
     // 사용자 정보 가져오기
     useEffect(() => {
@@ -33,6 +49,10 @@ const Mypage = () => {
           
           if (response.data.success) {
             setUserData(response.data.data);
+            // 서버에서 받아온 interests 설정
+            if (response.data.data.interests) {
+              setInterests(response.data.data.interests);
+            }
           } else {
             // 백엔드 API가 아직 구현되지 않은 경우를 위한 임시 처리
             setUserData({ 
@@ -61,9 +81,22 @@ const Mypage = () => {
       fetchUserData();
     }, [navigate]);
 
-    // 사이드바 토글 함수
-    const toggleSidebar = () => {
-      setIsSidebarOpen(!isSidebarOpen);
+    // interests 저장 함수
+    const saveInterests = async (updatedInterests) => {
+      try {
+        const userEmail = localStorage.getItem('userEmail');
+        await axios.put(`http://localhost:3001/userMain/${userEmail}/interests`, {
+          interests: updatedInterests
+        });
+      } catch (err) {
+        console.error('관심 분야 저장 오류:', err);
+      }
+    };
+
+    // 모달 닫기 핸들러 수정
+    const handleModalClose = async () => {
+      setIsEditingInterests(false);
+      await saveInterests(interests);
     };
 
     // 노트 변경 핸들러
@@ -79,17 +112,10 @@ const Mypage = () => {
 
     return (
          <div className="container">
-                <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-                  <h2>History</h2>
-                  <ul>
-                  </ul>
-                </div>
-          
                 <div className="header">
                   <div className='left-section'>
-                  <i className="fa-sharp fa-solid fa-bars" onClick={toggleSidebar}></i>
                    <img src={mainlogo} alt='logo' />
-                  <h1 >CPR</h1>
+                   <h1>CPR</h1>
                   </div>
         
                   <h1 onClick={() => navigate('/userMain')}>Code Programming Runner</h1> {/* 페이지 어디로 옮겨야 되는지 모르겠음 */}
@@ -122,12 +148,6 @@ const Mypage = () => {
       <li onClick={() => navigate('/savedQ')}>Saved Questions</li>
       <li onClick={() => navigate('/savedLink')}>Saved Links</li>
       <li onClick={() => navigate('/note')}>Note</li>
-      <textarea 
-        className="profile-note" 
-        placeholder="Write a note..." 
-        value={note}
-        onChange={handleNoteChange}
-      />
       <li onClick={handleLogout}>Log out</li>
     </ul>
     
@@ -143,13 +163,44 @@ const Mypage = () => {
       <>
         <p><strong>User Name</strong><br />{userData.username}</p>
         <p><strong>E-Mail</strong><br />{userData.email}</p>
-        <p><strong>Password</strong><br />_</p>
-        <p><strong>My interests</strong><br />
-          <span className="tag">#Python</span>
-          <span className="tag">#C/C++</span>
-          <span className="tag">#Algorithm</span>
-        </p>
+        <div>
+          <strong>My interests</strong>
+          <button 
+            onClick={() => setIsEditingInterests(true)}
+            className="edit-interests-btn"
+          >
+            Edit
+          </button>
+          <br />
+          <div className="interests-container">
+            {interests.map(interest => (
+              <span key={interest} className="tag">#{interest}</span>
+            ))}
+          </div>
+        </div>
       </>
+    )}
+
+    {/* 관심 분야 선택 모달 */}
+    {isEditingInterests && (
+      <div className="interests-modal">
+        <div className="interests-modal-content">
+          <h3>Select Your Interests</h3>
+          <div className="interests-grid">
+            {availableInterests.map(interest => (
+              <label key={interest} className="interest-item">
+                <input
+                  type="checkbox"
+                  checked={interests.includes(interest)}
+                  onChange={() => handleInterestToggle(interest)}
+                />
+                {interest}
+              </label>
+            ))}
+          </div>
+          <button onClick={handleModalClose}>Done</button>
+        </div>
+      </div>
     )}
   </div>
 </div>

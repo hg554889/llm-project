@@ -3,65 +3,80 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import mainlogo from './img/mainlogo.png';
 import './UserMain.css';
+import ReactMarkdown from 'react-markdown';
+import rehypeHighlight from 'rehype-highlight';
+import 'highlight.js/styles/github.css';
+
+const MarkdownComponents = {
+  code({ node, inline, className, children, ...props }) {
+    const match = /language-(\w+)/.exec(className || '');
+    return !inline ? (
+      <pre className={className}>
+        <code className={className} {...props}>
+          {children}
+        </code>
+      </pre>
+    ) : (
+      <code className={className} {...props}>
+        {children}
+      </code>
+    );
+  }
+};
 
 const UserMain = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const chatContainerRef = useRef(null); // 채팅 컨테이너 참조 추가
-  
+  const chatContainerRef = useRef(null);
+
   const [userData, setUserData] = useState({
     username: '',
     email: ''
   });
-  
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  // 챗봇 관련 상태 추가
+
   const [searchQuery, setSearchQuery] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isNewChat, setIsNewChat] = useState(false);
+  const [currentSessionId, setCurrentSessionId] = useState(null);
+  const [chatSessions, setChatSessions] = useState([]);
 
+  // 사용자 정보 및 기본 데이터 로드
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     };
-    
+
     const fetchUserData = async () => {
       try {
-        // 로컬 스토리지에서 로그인한 사용자 이메일 가져오기
         const userEmail = localStorage.getItem('userEmail');
-        
         if (!userEmail) {
-          // 로그인 정보가 없으면 로그인 페이지로 리다이렉트
           navigate('/login');
           return;
         }
-        
-        // 이메일로 특정 사용자 정보 요청
+
+        // 사용자 정보 불러오기 (기존 API)
         const response = await axios.get(`http://localhost:3001/userMain/${userEmail}`);
-        
         if (response.data.success) {
           setUserData(response.data.data);
         } else {
-          // 백엔드 API가 아직 구현되지 않은 경우를 위한 임시 처리
           setUserData({ 
-            username: userEmail.split('@')[0], // 이메일에서 사용자명 추출
+            username: userEmail.split('@')[0],
             email: userEmail 
           });
         }
       } catch (err) {
-        console.error('사용자 정보 로딩 오류:', err);
-        
-        // 백엔드 API가 아직 구현되지 않은 경우를 위한 임시 처리
         const userEmail = localStorage.getItem('userEmail');
         if (userEmail) {
           setUserData({ 
-            username: userEmail.split('@')[0], // 이메일에서 사용자명 추출
+            username: userEmail.split('@')[0],
             email: userEmail 
           });
         } else {
@@ -71,36 +86,63 @@ const UserMain = () => {
         setLoading(false);
       }
     };
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     fetchUserData();
-    
-    // 로컬 스토리지에서 채팅 기록 불러오기
-    const savedChatHistory = localStorage.getItem('chatHistory');
-    if (savedChatHistory) {
-      setChatHistory(JSON.parse(savedChatHistory));
-    }
-    
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [navigate]);
 
-  // 챗 히스토리가 변경될 때마다 로컬 스토리지에 저장
+  // 백엔드 DB에서 사용자별 채팅 기록 불러오기 (페이지 로드시)
   useEffect(() => {
-    if (chatHistory.length > 0) {
-      localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
-    }
-  }, [chatHistory]);
+    const fetchChatHistory = async () => {
+      const userEmail = localStorage.getItem('userEmail');
+      if (!userEmail) return;
+      try {
+        const response = await axios.get('http://localhost:3001/chatHistory', {
+          params: { userEmail }
+        });
+        if (response.data.success) {
+          setChatHistory(response.data.messages);
+        }
+      } catch (error) {
+        console.error('대화 기록 불러오기 오류:', error);
+      }
+    };
 
-  // 새 메시지가 추가될 때마다 스크롤을 하단으로 이동
+    fetchChatHistory();
+  }, []);
+
+  // 새로운 메시지가 추가될 때마다 채팅창 스크롤을 맨 아래로
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [chatHistory]);
 
-  // 로그아웃 함수
+  // 채팅 세션 목록 불러오기
+  useEffect(() => {
+    const fetchSessions = async () => {
+      const userEmail = localStorage.getItem('userEmail');
+      if (!userEmail) return;
+      
+      try {
+        const response = await axios.get('http://localhost:3001/chat/sessions', {
+          params: { userEmail }
+        });
+        if (response.data.success) {
+          setChatSessions(response.data.sessions);
+        }
+      } catch (error) {
+        console.error('세션 목록 조회 오류:', error);
+      }
+    };
+
+    fetchSessions();
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem('userEmail');
     navigate('/');
@@ -114,32 +156,95 @@ const UserMain = () => {
     setIsOpen((prev) => !prev);
   };
 
-  // 검색어 입력 핸들러
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  // AI에 질문 전송 핸들러
+  // 메시지를 DB에 저장하는 함수
+  const saveMessageToDB = async (message) => {
+    try {
+      await axios.post('http://localhost:3001/chat/message', {
+        sessionId: currentSessionId,
+        role: message.role,
+        content: message.content
+      });
+    } catch (error) {
+      console.error('메시지 저장 오류:', error);
+    }
+  };
+
+  const createNewSession = async () => {
+    try {
+      const response = await axios.post('http://localhost:3001/chat/session', {
+        userEmail: localStorage.getItem('userEmail')
+      });
+      
+      if (response.data.success) {
+        setCurrentSessionId(response.data.sessionId);
+        setChatHistory([]);
+        setSearchQuery('');
+        // 세션 목록 새로고침
+        const sessionsResponse = await axios.get('http://localhost:3001/chat/sessions', {
+          params: { userEmail: localStorage.getItem('userEmail') }
+        });
+        if (sessionsResponse.data.success) {
+          setChatSessions(sessionsResponse.data.sessions);
+        }
+      }
+    } catch (error) {
+      console.error('세션 생성 오류:', error);
+    }
+  };
+
+  const fetchChatSessions = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/chat/sessions', {
+        params: { userEmail: localStorage.getItem('userEmail') }
+      });
+      
+      if (response.data.success) {
+        setChatSessions(response.data.sessions);
+      }
+    } catch (error) {
+      console.error('세션 목록 조회 오류:', error);
+    }
+  };
+
+  const fetchSessionMessages = async (sessionId) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/chat/messages/${sessionId}`);
+      if (response.data.success) {
+        setChatHistory(response.data.messages);
+        setCurrentSessionId(sessionId);
+      }
+    } catch (error) {
+      console.error('메시지 조회 오류:', error);
+    }
+  };
+
   const handleSendQuestion = async (e) => {
     if (e) e.preventDefault();
-    
     if (!searchQuery.trim() || isProcessing) return;
-    
+
+    // 새로운 채팅이면 세션 생성
+    if (!currentSessionId) {
+      await createNewSession();
+    }
+
     const question = searchQuery.trim();
     setSearchQuery('');
     setIsProcessing(true);
-    
-    // 사용자 질문을 채팅 기록에 추가
+
     const newUserMessage = {
-      id: Date.now(),
+      sessionId: currentSessionId,
       role: 'user',
       content: question,
       timestamp: new Date().toISOString()
     };
-    
+
     setChatHistory(prev => [...prev, newUserMessage]);
-    
-    // 로딩 메시지 추가
+    saveMessageToDB(newUserMessage);
+
     const loadingMessageId = Date.now() + 1;
     const loadingMessage = {
       id: loadingMessageId,
@@ -148,101 +253,197 @@ const UserMain = () => {
       isLoading: true,
       timestamp: new Date().toISOString()
     };
-    
+
     setChatHistory(prev => [...prev, loadingMessage]);
-    
+
     try {
-      // AI 서버에 질문 보내기
       const response = await axios.post('http://localhost:3001/ai/generate', {
+        sessionId: currentSessionId,
         textGen: question
       });
-      
-      // 로딩 메시지 제거 및 실제 응답 추가
-      setChatHistory(prev => {
-        const filteredMessages = prev.filter(msg => msg.id !== loadingMessageId);
-        const aiResponse = {
-          id: Date.now() + 2,
-          role: 'assistant',
-          content: response.data.chatbot_response,
-          timestamp: new Date().toISOString()
-        };
-        return [...filteredMessages, aiResponse];
-      });
-      
-      // 사이드바 히스토리에 질문 추가
-      const historyItems = JSON.parse(localStorage.getItem('searchHistory') || '[]');
-      const newHistoryItem = {
-        id: Date.now(),
-        question,
+
+      let aiResponseContent = response.data.chatbot_response;
+      if (typeof aiResponseContent === 'object') {
+        aiResponseContent = JSON.stringify(aiResponseContent, null, 2);
+      }
+
+      const aiMessage = {
+        id: Date.now() + 2,
+        role: 'assistant',
+        content: String(aiResponseContent),
         timestamp: new Date().toISOString()
       };
-      
-      const updatedHistory = [newHistoryItem, ...historyItems].slice(0, 10); // 최대 10개 유지
-      localStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
-      
-    } catch (error) {
-      console.error('AI 응답 오류:', error);
-      
-      // 로딩 메시지 제거 및 오류 메시지 추가
+
+      // 로딩 메시지 제거 후, AI 메시지 추가
       setChatHistory(prev => {
         const filteredMessages = prev.filter(msg => msg.id !== loadingMessageId);
-        const errorMessage = {
-          id: Date.now() + 2,
-          role: 'assistant',
-          content: '죄송합니다. 응답 생성 중에 오류가 발생했습니다. 다시 시도해 주세요.',
-          isError: true,
-          timestamp: new Date().toISOString()
-        };
+        return [...filteredMessages, aiMessage];
+      });
+      saveMessageToDB(aiMessage);
+
+      // History 업데이트
+      if (isNewChat) {
+        const userEmail = localStorage.getItem('userEmail');
+        const historyItems = JSON.parse(localStorage.getItem(`searchHistory_${userEmail}`) || '[]');
+        const currentHistory = historyItems[0];
+        
+        if (currentHistory) {
+          currentHistory.messages = [...chatHistory, newUserMessage, aiMessage];
+          localStorage.setItem(`searchHistory_${userEmail}`, JSON.stringify(historyItems));
+        }
+      }
+
+      setIsNewChat(false);
+
+      // 세션 목록 새로고침
+      const sessionsResponse = await axios.get('http://localhost:3001/chat/sessions', {
+        params: { userEmail: localStorage.getItem('userEmail') }
+      });
+      if (sessionsResponse.data.success) {
+        setChatSessions(sessionsResponse.data.sessions);
+      }
+    } catch (error) {
+      console.error('AI 응답 오류:', error);
+      const errorMessage = {
+        id: Date.now() + 2,
+        role: 'assistant',
+        content: '죄송합니다. 응답 생성 중에 오류가 발생했습니다. 다시 시도해 주세요.',
+        isError: true,
+        timestamp: new Date().toISOString()
+      };
+      setChatHistory(prev => {
+        const filteredMessages = prev.filter(msg => msg.id !== loadingMessageId);
         return [...filteredMessages, errorMessage];
       });
+      saveMessageToDB(errorMessage);
     } finally {
       setIsProcessing(false);
     }
   };
 
-  // 채팅 기록 지우기
-  const clearChatHistory = () => {
-    setChatHistory([]);
-    localStorage.removeItem('chatHistory');
+  // History 저장 함수 추가
+  const saveToHistory = () => {
+    if (chatHistory.length === 0) return;
+    
+    const userEmail = localStorage.getItem('userEmail');
+    const historyItems = JSON.parse(localStorage.getItem(`searchHistory_${userEmail}`) || '[]');
+    
+    // 첫 번째 사용자 메시지를 제목으로 사용
+    const firstUserMessage = chatHistory.find(msg => msg.role === 'user');
+    if (!firstUserMessage) return;
+
+    const newHistoryItem = {
+      id: Date.now(),
+      question: firstUserMessage.content,
+      timestamp: new Date().toISOString(),
+      messages: chatHistory // 전체 대화 내용 저장
+    };
+
+    const updatedHistory = [newHistoryItem, ...historyItems].slice(0, 10);
+    localStorage.setItem(`searchHistory_${userEmail}`, JSON.stringify(updatedHistory));
   };
 
-  // Enter 키 처리
+  const clearChatHistory = () => {
+    setChatHistory([]);
+    // 필요 시 DB의 전체 기록 삭제 API 호출 추가 가능
+  };
+
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter') {
+      if (e.shiftKey) return;
       e.preventDefault();
       handleSendQuestion();
     }
+  };
+
+  // History 클릭 시 해당 채팅방의 전체 대화 내용을 복원
+  const handleHistoryClick = async (sessionId) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/chat/messages/${sessionId}`);
+      if (response.data.success) {
+        setChatHistory(response.data.messages); // 채팅 기록 업데이트
+        setCurrentSessionId(sessionId); // 현재 세션 ID 설정
+        setIsNewChat(false); // 새로운 채팅 상태 해제
+      } else {
+        console.error('메시지 조회 실패:', response.data.error);
+      }
+    } catch (error) {
+      console.error('메시지 조회 오류:', error);
+    }
+  };
+
+  // History 항목 삭제 함수 추가
+  const deleteHistoryItem = async (sessionId, e) => {
+    e.stopPropagation();
+    try {
+      await axios.delete(`http://localhost:3001/chat/session/${sessionId}`);
+      // 세션 목록 새로고침
+      const response = await axios.get('http://localhost:3001/chat/sessions', {
+        params: { userEmail: localStorage.getItem('userEmail') }
+      });
+      if (response.data.success) {
+        setChatSessions(response.data.sessions);
+      }
+      if (currentSessionId === sessionId) {
+        setChatHistory([]);
+        setCurrentSessionId(null);
+      }
+    } catch (error) {
+      console.error('세션 삭제 오류:', error);
+    }
+  };
+
+  const renderMessageContent = (message) => {
+    if (message.isLoading) {
+      return (
+        <div className="loading-animation">
+          <span>.</span><span>.</span><span>.</span>
+        </div>
+      );
+    }
+
+    return message.role === 'assistant' ? (
+      <ReactMarkdown 
+        components={MarkdownComponents}
+        rehypePlugins={[rehypeHighlight]}
+      >
+        {message.content}
+      </ReactMarkdown>
+    ) : (
+      <pre>{message.content}</pre>
+    );
   };
 
   return (
     <div className="container">
       <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <h2>History</h2>
-        <ul>
-          {JSON.parse(localStorage.getItem('searchHistory') || '[]')
-            .map(item => (
-              <li key={item.id} onClick={() => setSearchQuery(item.question)}>
-                {item.question.length > 25 
-                  ? item.question.substring(0, 25) + '...' 
-                  : item.question}
-              </li>
-            ))
-          }
+        <ul className="chat-history-list">
+          {chatSessions.map(session => (
+            <li 
+              key={session._id} 
+              onClick={() => handleHistoryClick(session._id)} // 클릭 시 handleHistoryClick 호출
+              className="history-item"
+            >
+              <div className="history-item-content">
+                <span className="history-title">
+                  {session.title || "새로운 채팅"}
+                </span>
+                <span className="history-date">
+                  {new Date(session.lastMessageAt).toLocaleDateString()}
+                </span>
+              </div>
+              <button 
+                className="delete-history-btn"
+                onClick={(e) => deleteHistoryItem(session._id, e)}
+              >
+                <i className="fa-solid fa-times"></i>
+              </button>
+            </li>
+          ))}
         </ul>
-        {JSON.parse(localStorage.getItem('searchHistory') || '[]').length > 0 && (
-          <button 
-            className="clear-history-btn"
-            onClick={() => {
-              localStorage.removeItem('searchHistory');
-              setIsSidebarOpen(false);
-              setIsSidebarOpen(true);
-            }}
-          >
-            기록 지우기
-          </button>
-        )}
       </div>
-    
+
       <div className="header">
         <div className='left-section'>
           <i className="fa-sharp fa-solid fa-bars" onClick={toggleSidebar}></i>
@@ -250,9 +451,13 @@ const UserMain = () => {
           <h1>CPR</h1>
         </div>
 
-        <h1 onClick={() => navigate('/')}>Code Programming Runner</h1>
+        <h1 onClick={() => {
+          setChatHistory([]);
+          setSearchQuery('');
+          navigate('/userMain');
+        }}>Code Programming Runner</h1>
         
-        <div className='right-section' >
+        <div className='right-section'>
           <i className="fa-solid fa-user" onClick={toggleDropdown}></i>
           {isOpen && (
             <div className="profile-dropdown" ref={dropdownRef}>
@@ -265,7 +470,7 @@ const UserMain = () => {
                     <p>{error}</p>
                   ) : (
                     <>
-                      <p className="profile-name">{userData.username} &gt;</p>
+                      <p className="profile-name">{userData.username}</p>
                       <p className="profile-email">{userData.email}</p>
                     </>
                   )}
@@ -284,13 +489,19 @@ const UserMain = () => {
           <i className="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
         </div>
       </div>
-      
-      {/* 채팅 표시 영역 추가 */}
+
       <div className="chat-display" ref={chatContainerRef}>
+        {chatHistory.length > 0 && (
+          <div className="chat-controls">
+            <button className="clear-chat-btn" onClick={clearChatHistory}>
+              대화 내용 지우기
+            </button>
+          </div>
+        )}
+
         {chatHistory.length === 0 ? (
           <div className="empty-chat">
             <h2>Code Programming Runner AI에 질문해보세요!</h2>
-            {/* <p>프로그래밍 문제, 코드 오류, 언어 학습에 관한 질문을 입력하세요.</p> */}
           </div>
         ) : (
           chatHistory.map(message => (
@@ -302,13 +513,7 @@ const UserMain = () => {
                 {message.role === 'assistant' ? 'AI' : userData.username?.charAt(0) || 'U'}
               </div>
               <div className="message-content">
-                {message.isLoading ? (
-                  <div className="loading-animation">
-                    <span>.</span><span>.</span><span>.</span>
-                  </div>
-                ) : (
-                  <pre>{message.content}</pre>
-                )}
+                {renderMessageContent(message)}
                 <div className="message-time">
                   {new Date(message.timestamp).toLocaleTimeString()}
                 </div>
@@ -318,42 +523,39 @@ const UserMain = () => {
         )}
       </div>
 
-      <div className="content">
-        {/* 채팅 컨트롤 (기존 디자인을 유지하기 위해 필요한 경우) */}
-        {chatHistory.length > 0 && (
-          <div className="chat-controls">
-            <button className="clear-chat-btn" onClick={clearChatHistory}>
-              대화 내용 지우기
-            </button>
-          </div>
-        )}
-      </div>
- 
-      {/* 기존 검색창 유지하면서 기능 추가 */}
       <div className="search-container">
-        <i className="fa-solid fa-magnifying-glass"></i>
-        <input 
-          type="text" 
-          className="search-bar" 
-          placeholder={isProcessing ? "답변을 생성 중입니다..." : "질문을 입력하세요..."} 
-          value={searchQuery}
-          onChange={handleSearchChange}
-          onKeyPress={handleKeyPress}
-          disabled={isProcessing}
-        />
-        {/* 전송 버튼을 보이지 않게 추가해서 엔터키나 검색 아이콘 클릭으로 전송 */}
-        <button 
-          type="button" 
-          className="search-submit" 
-          onClick={handleSendQuestion}
-          disabled={isProcessing}
-          style={{ display: 'none' }}
-        >
-          전송
-        </button>
+        <div className="search-wrapper">
+          <i className="fa-solid fa-magnifying-glass"></i>
+          <textarea 
+            className="search-bar" 
+            placeholder={isProcessing ? "답변을 생성 중입니다..." : "무엇이든 물어보세요!"} 
+            value={searchQuery}
+            onChange={handleSearchChange}
+            onKeyDown={handleKeyPress}
+            disabled={isProcessing}
+            rows={1}
+          />
+        </div>
+        <div className="button-group">
+          <button 
+            type="button" 
+            className="new-chat-btn"
+            onClick={() => {
+              setChatHistory([]);
+              setSearchQuery('');
+              setIsNewChat(true); // 새로운 채팅 상태로 설정
+              const userEmail = localStorage.getItem('userEmail');
+              if (userEmail) {
+                localStorage.removeItem(`chatHistory_${userEmail}`);
+              }
+            }}
+          >
+            새로운 채팅 시작
+          </button>
+        </div>
       </div>
     </div>
   );
-}
+};
 
 export default UserMain;

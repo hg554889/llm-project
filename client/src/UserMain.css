@@ -8,10 +8,11 @@ body {
   
   .sidebar {
     position: fixed;
-    top: 13%;
+    top: 60px;
     left: -250px; /* 초기 위치는 화면 밖 */
     width: 250px;
-    height: 75%;
+    height: calc(100% - 60px);
+    z-index: 999;
     background-color: rgb(220, 213, 254);
     color: green;
     padding: 20px;
@@ -77,37 +78,82 @@ body {
 }
   
 
-  .search-container {
-    position: relative; /* 내부 아이콘을 절대 위치로 배치하기 위해 설정 */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 400px; /* 검색창을 오른쪽으로 이동 */
-    margin-top: 500px; /* 검색창을 아래로 이동 */
-    width: 700px; /* 검색창의 너비 */
-    border: 2px solid rgb(220, 213, 254);
-    border-radius: 25px; /* 둥근 모서리 */
-    background-color: rgb(220, 213, 254);
-    padding: 5px;
+/* 기존 .search-container 스타일에서 아래처럼 수정/추가 */
+.search-container {
+  position: fixed;        /* 하단 고정 */
+  bottom: 20px;           /* 화면 하단에서 얼마나 띄울지 */
+  left: 0;               
+  right: 0;              
+  margin: 0 auto;         /* 가운데 정렬 */
+  width: 800px;           /* 원하는 너비 */
+  max-width: 95%;         /* 화면 작아질 때 대응 */
+  z-index: 1000;          /* 다른 요소보다 위 */
+  
+  background-color: rgb(220, 213, 254);
+  border-radius: 25px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 25px;
+  padding: 0 15px;
+  position: relative;
+  margin: 0 auto;
+  width: 95%;  /* 컨테이너 내 너비 확장 */
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.new-chat-btn {
+  padding: 8px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.new-chat-btn:hover {
+  background: #0056b3;
 }
 
 /* 검색 입력창 */
 .search-bar {
-    width: 100%; /* 부모(.search-container) 너비에 맞춤 */
-    padding: 10px 15px 10px 50px; /* 왼쪽 공간 확보 (아이콘 위치) */
-    font-size: 16px;
-    border: none; /* 테두리 제거 */
-    border-radius: 25px; /* 둥근 모서리 */
-    outline: none;
-    background: none; /* 부모 배경색 유지 */
+  width: 100%;
+  padding: 15px 15px 15px 40px;  /* 좌측 패딩 감소 */
+  font-size: 18px;
+  font-family: Arial, sans-serif;
+  border: none;
+  border-radius: 25px;
+  outline: none;
+  background: none;
+  resize: none;  /* 크기 조절 기능 제거 */
+  min-height: 25px;  /* 최소 높이 증가 */
+  line-height: 24px;  /* 줄 간격 증가 */
+  font-weight: normal;  /* 볼드 제거 */
 }
 
 /* 검색창 안의 돋보기 아이콘 */
 .search-container i {
     position: absolute;
-    left: 15px; /* 아이콘을 검색창 왼쪽에 배치 */
+    left: 25px; /* 위치 조정 */
+    top: 50%;
+    transform: translateY(-50%);
     font-size: 20px;
     color: black;
+    z-index: 1;
 }
 
 
@@ -197,19 +243,62 @@ body {
   flex-shrink: 0;
 }
 
-/* 채팅 표시 영역 */
+/* 채팅 표시 영역 수정 */
 .chat-display {
-  position: fixed;
-  top: 80px; /* 헤더 아래 여백 */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
+  position: relative;
+  z-index: 1; /* 사이드바 보다 낮게 */
+  width: 100%;
   max-width: 1000px;
-  height: calc(100vh - 190px); /* 헤더와 검색창 사이 */
-  overflow-y: auto;
+  margin: 80px auto 0;    /* 위쪽 100px 정도 여백 (헤더 때문에) */
+  padding: 0 20px 200px 20px;   /* 아래쪽 공간 확보 (검색창 높이보다 살짝 여유롭게) */
+  background-color: transparent;
+}
+
+/* 채팅 메시지 컨테이너 수정 */
+.chat-message {
+  display: flex;
   padding: 20px;
-  scroll-behavior: smooth;
-  background-color: transparent; /* 배경 없음 */
+  margin: 0;
+  max-width: 100%;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.chat-message.user {
+  background-color: #ffffff;
+  margin: 0;
+  flex-direction: row;
+}
+
+.chat-message.assistant {
+  background-color: #f7f7f8;
+  margin: 0;
+}
+
+/* 메시지 컨텐츠 수정 */
+.message-content {
+  background-color: transparent;
+  padding: 0 0 0 20px;
+  border-radius: 0;
+  position: relative;
+  max-width: calc(100% - 40px);
+  color: #374151;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.user .message-content {
+  background-color: transparent;
+}
+
+/* 아바타 스타일 수정 */
+.message-avatar {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  border-radius: 3px;
+  margin: 0;
+  font-size: 12px;
 }
 
 /* 채팅이 없을 때 안내 메시지 */
@@ -221,6 +310,7 @@ body {
   text-align: center;
   height: 80%;
   color: #666;
+  margin: 50px 0;  /* 상하 여백 증가 */
 }
 
 .empty-chat h2 {
@@ -238,6 +328,7 @@ body {
 /* 채팅 메시지 */
 .chat-message {
   display: flex;
+  align-items: center;
   margin-bottom: 20px;
   max-width: 80%;
 }
@@ -249,19 +340,26 @@ body {
 
 .chat-message.assistant {
   margin-right: auto;
+  display: flex;
+  align-items: flex-start;  /* 상단 정렬 */
 }
 
 .message-avatar {
   width: 40px;
   height: 40px;
+  min-width: 40px;       /* 가로 최소 크기 보장 */
+  min-height: 40px;      /* 세로 최소 크기 보장 */
+  flex-shrink: 0;        /* 축소되지 않도록 */
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 10px;
+  margin: 0 10px 0 0;
   background-color: rgb(220, 213, 254);
   color: #333;
   font-weight: bold;
+  font-size: 14px;       /* "AI" 텍스트가 잘 보이도록 조정 */
+  overflow: hidden;      /* 혹시 텍스트가 넘치면 숨김 */
 }
 
 .user .message-avatar {
@@ -386,4 +484,99 @@ body {
 
 .chat-display::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.2);
+}
+
+.message-content .markdown-body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.message-content pre {
+  background-color: #f6f8fa;
+  border-radius: 6px;
+  padding: 16px;
+  overflow: auto;
+}
+
+.message-content code {
+  background-color: rgba(175, 184, 193, 0.2);
+  border-radius: 6px;
+  padding: 0.2em 0.4em;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+}
+
+.message-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.message-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+.message-content th,
+.message-content td {
+  border: 1px solid #dfe2e5;
+  padding: 6px 13px;
+}
+
+.message-content blockquote {
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+  padding: 0 1em;
+  margin: 0;
+}
+
+.chat-history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.history-item {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin: 4px 0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-history-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+
+.history-item:hover .delete-history-btn {
+  opacity: 1;
+}
+
+.delete-history-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.history-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.history-title {
+  font-size: 14px;
+  color: #fff;
+}
+
+.history-date {
+  font-size: 12px;
+  color: #666;
 }

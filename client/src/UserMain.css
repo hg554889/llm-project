@@ -1,46 +1,45 @@
 /* index.css */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: white;
-  }
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: white;
+}
 
-  
-  .sidebar {
-    position: fixed;
-    top: 60px;
-    left: -250px; /* 초기 위치는 화면 밖 */
-    width: 250px;
-    height: calc(100% - 60px);
-    z-index: 999;
-    background-color: rgb(220, 213, 254);
-    color: green;
-    padding: 20px;
-    transition: left 0.3s ease; /* 애니메이션 */
-    border-top-right-radius: 20px;  /* 오른쪽 상단 둥글게 */
-    border-bottom-right-radius: 20px;  /* 오른쪽 하단 둥글게 */
-  }
+.sidebar {
+  position: fixed;
+  top: 70px;
+  left: -300px; /* 초기 위치는 화면 밖 */
+  width: 250px;
+  height: 600px;
+  z-index: 999;
+  background-color: rgb(220, 213, 254);
+  color: green;
+  padding: 20px;
+  transition: left 0.3s ease; /* 애니메이션 */
+  border-top-right-radius: 20px; /* 오른쪽 상단 둥글게 */
+  border-bottom-right-radius: 20px; /* 오른쪽 하단 둥글게 */
+}
 
-  .sidebar.open {
-    left: 0; /* 사이드바가 열리면 화면에 표시 */
-  }
+.sidebar.open {
+  left: 0; /* 사이드바가 열리면 화면에 표시 */
+}
 
-  .header {
-    position: fixed; /* 항상 상단에 고정 */
-    top: 5px;
-    left: 0;
-    right: 0;
-    min-width: 100vw; /* 최소한 화면 전체 너비 */
-    display: flex;
-    align-items: center;
-    justify-content: space-between; 
-    background-color: rgb(255, 255, 255); 
-    color: #0a0a23;
-    padding: 10px 20px; /* 패딩 추가 */
-    box-sizing: border-box; /* 패딩 포함한 크기 조정 */
-    height: 60px; /* 높이 지정 */
-    /* 다른 요소보다 위에 표시 */
-    z-index: 999;
+.header {
+  position: fixed; /* 항상 상단에 고정 */
+  top: 5px;
+  left: 0;
+  right: 0;
+  min-width: 100vw; /* 최소한 화면 전체 너비 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(255, 255, 255);
+  color: #0a0a23;
+  padding: 10px 20px; /* 패딩 추가 */
+  box-sizing: border-box; /* 패딩 포함한 크기 조정 */
+  height: 60px; /* 높이 지정 */
+  /* 다른 요소보다 위에 표시 */
+  z-index: 999;
 }
 
 /* 왼쪽 섹션 스타일 */
@@ -65,30 +64,28 @@ body {
   cursor: pointer;
 }
 
-  .header h1 {
-    margin: 0;
-    text-align: center;
-  }
+.header h1 {
+  margin: 0;
+  text-align: center;
+}
 
-  
-.header img{
+.header img {
   width: 50px;
   height: auto;
   border-radius: 20%;
 }
-  
 
 /* 기존 .search-container 스타일에서 아래처럼 수정/추가 */
 .search-container {
-  position: fixed;        /* 하단 고정 */
-  bottom: 20px;           /* 화면 하단에서 얼마나 띄울지 */
-  left: 0;               
-  right: 0;              
-  margin: 0 auto;         /* 가운데 정렬 */
-  width: 800px;           /* 원하는 너비 */
-  max-width: 95%;         /* 화면 작아질 때 대응 */
-  z-index: 1000;          /* 다른 요소보다 위 */
-  
+  position: fixed; /* 하단 고정 */
+  bottom: 20px; /* 화면 하단에서 얼마나 띄울지 */
+  left: 0;
+  right: 0;
+  margin: 0 auto; /* 가운데 정렬 */
+  width: 800px; /* 원하는 너비 */
+  max-width: 95%; /* 화면 작아질 때 대응 */
+  z-index: 1000; /* 다른 요소보다 위 */
+
   background-color: rgb(220, 213, 254);
   border-radius: 25px;
   padding: 20px;
@@ -105,7 +102,7 @@ body {
   padding: 0 15px;
   position: relative;
   margin: 0 auto;
-  width: 95%;  /* 컨테이너 내 너비 확장 */
+  width: 95%; /* 컨테이너 내 너비 확장 */
 }
 
 .button-group {
@@ -132,46 +129,43 @@ body {
 /* 검색 입력창 */
 .search-bar {
   width: 100%;
-  padding: 15px 15px 15px 40px;  /* 좌측 패딩 감소 */
+  padding: 15px 15px 15px 40px; /* 좌측 패딩 감소 */
   font-size: 18px;
   font-family: Arial, sans-serif;
   border: none;
   border-radius: 25px;
   outline: none;
   background: none;
-  resize: none;  /* 크기 조절 기능 제거 */
-  min-height: 25px;  /* 최소 높이 증가 */
-  line-height: 24px;  /* 줄 간격 증가 */
-  font-weight: normal;  /* 볼드 제거 */
+  resize: none; /* 크기 조절 기능 제거 */
+  min-height: 25px; /* 최소 높이 증가 */
+  line-height: 24px; /* 줄 간격 증가 */
+  font-weight: normal; /* 볼드 제거 */
 }
 
 /* 검색창 안의 돋보기 아이콘 */
 .search-container i {
-    position: absolute;
-    left: 25px; /* 위치 조정 */
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 20px;
-    color: black;
-    z-index: 1;
+  position: absolute;
+  left: 25px; /* 위치 조정 */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: black;
+  z-index: 1;
 }
 
+.content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .content {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.content h1 {
+  color: black;
+}
 
-  
-  .content h1 {
-    color: black;
-  }
-  
-
-    /* 드롭다운 전체 박스 */
-.right-section{
+/* 드롭다운 전체 박스 */
+.right-section {
   position: relative;
 }
 .profile-dropdown {
@@ -190,12 +184,12 @@ body {
 /* fadeIn 애니메이션 */
 @keyframes fadeIn {
   from {
-  opacity: 0;
-  transform: translateY(-5px);
+    opacity: 0;
+    transform: translateY(-5px);
   }
   to {
-  opacity: 1;
-  transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -249,8 +243,8 @@ body {
   z-index: 1; /* 사이드바 보다 낮게 */
   width: 100%;
   max-width: 800px; /* 더 좁게 조정 */
-  margin: 80px auto 0;    /* 위쪽 100px 정도 여백 (헤더 때문에) */
-  padding: 0 20px 200px 20px;   /* 아래쪽 공간 확보 (검색창 높이보다 살짝 여유롭게) */
+  margin: 80px auto 0; /* 위쪽 100px 정도 여백 (헤더 때문에) */
+  padding: 0 20px 200px 20px; /* 아래쪽 공간 확보 (검색창 높이보다 살짝 여유롭게) */
   background-color: transparent;
 }
 
@@ -302,7 +296,7 @@ body {
   text-align: center;
   height: 80%;
   color: #666;
-  margin: 50px 0;  /* 상하 여백 증가 */
+  margin: 50px 0; /* 상하 여백 증가 */
 }
 
 .empty-chat h2 {
@@ -333,15 +327,15 @@ body {
 .chat-message.assistant {
   margin-right: auto;
   display: flex;
-  align-items: flex-start;  /* 상단 정렬 */
+  align-items: flex-start; /* 상단 정렬 */
 }
 
 .message-avatar {
   width: 40px;
   height: 40px;
-  min-width: 40px;       /* 가로 최소 크기 보장 */
-  min-height: 40px;      /* 세로 최소 크기 보장 */
-  flex-shrink: 0;        /* 축소되지 않도록 */
+  min-width: 40px; /* 가로 최소 크기 보장 */
+  min-height: 40px; /* 세로 최소 크기 보장 */
+  flex-shrink: 0; /* 축소되지 않도록 */
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -350,8 +344,8 @@ body {
   background-color: rgb(220, 213, 254);
   color: #333;
   font-weight: bold;
-  font-size: 14px;       /* "AI" 텍스트가 잘 보이도록 조정 */
-  overflow: hidden;      /* 혹시 텍스트가 넘치면 숨김 */
+  font-size: 14px; /* "AI" 텍스트가 잘 보이도록 조정 */
+  overflow: hidden; /* 혹시 텍스트가 넘치면 숨김 */
 }
 
 .user .message-avatar {
@@ -407,9 +401,15 @@ body {
 }
 
 @keyframes loadingDots {
-  0% { opacity: 0; }
-  50% { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 /* 에러 메시지 */
@@ -420,7 +420,8 @@ body {
 }
 
 /* 기록 지우기 버튼 */
-.clear-chat-btn, .clear-history-btn {
+.clear-chat-btn,
+.clear-history-btn {
   background-color: transparent;
   border: 1px solid #ddd;
   color: #666;
@@ -433,7 +434,8 @@ body {
   margin: 10px auto;
 }
 
-.clear-chat-btn:hover, .clear-history-btn:hover {
+.clear-chat-btn:hover,
+.clear-history-btn:hover {
   background-color: #f0f0f0;
   color: #333;
 }
@@ -479,7 +481,8 @@ body {
 }
 
 .message-content .markdown-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    sans-serif;
   line-height: 1.6;
 }
 
@@ -494,7 +497,8 @@ body {
   background-color: rgba(175, 184, 193, 0.2);
   border-radius: 6px;
   padding: 0.2em 0.4em;
-  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+    Liberation Mono, monospace;
 }
 
 .message-content img {

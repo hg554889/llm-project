@@ -1,60 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-//import ReactDOM from 'react-dom/client';
-import axios from 'axios';
-import mainlogo from './img/mainlogo.png'; // 이미지 파일 추가
-//import Router from './Router'; 
-import './Main.css'; // CSS 파일 추가
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import "./Main.css"; // 스타일은 아래 CSS 참고
 
 const Main = () => {
-  const [message, setMessage] = useState('');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
-  const navigate = useNavigate(); // React Router를 사용한 페이지 이동
+  const navigate = useNavigate();
 
-  // 사이드바 열기/닫기 함수
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+  const handleStartClick = () => {
+    navigate("/login");
   };
 
   return (
-    <div className="container">
-
-      <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-        <h2>History</h2>
-          <ul>
-          </ul>
+    <div className="main-container">
+      <div className="main-box">
+        <h1 className="main-title">Code Programming Runner</h1>
+        <p className="main-description">
+          This is a service for programming language learners, <br />
+          and it can accommodate everyone from beginners to development job seekers. <br />
+          Hurry up and try it and check your skills as it improves!
+        </p>
+        <button className="main-button" onClick={handleStartClick}>
+          Go to Start &gt;
+        </button>
       </div>
-    
-    
-        <div className="header">
-          <div className='left-section'>
-          <i className="fa-sharp fa-solid fa-bars" onClick={toggleSidebar}></i>
-          <img src={mainlogo} alt='logo' />
-          <h1>CPR</h1>
-          </div>
-
-          <h1 onClick={() => navigate('/')}>Code Programming Runner</h1>
-          
-          <div className='right-section'>
-          <i className="fa-solid fa-user-plus" onClick={() => navigate('/login')}></i>
-          <i class="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
-          </div>
-        </div>
- 
-        <div className="search-container">
-          <i className="fa-solid fa-magnifying-glass"></i>
-          <input type="text" className="search-bar" placeholder="Search..." />
-        </div>
-  
-
-      {/*백용 콘텐트 따로 빼둠둠*/}
-      <div className="content">
-        <h1>{message}</h1>
-      </div>
-      
     </div>
   );
-}
-
+};
 
 export default Main;

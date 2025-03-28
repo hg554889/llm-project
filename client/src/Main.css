@@ -1,124 +1,47 @@
-/* index.css */
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: white;
-  }
+/* Main.css */
 
-  
-  .sidebar {
-    position: fixed;
-    top: 13%;
-    left: -250px; /* 초기 위치는 화면 밖 */
-    width: 250px;
-    height: 75%;
-    background-color: rgb(220, 213, 254);
-    color: green;
-    padding: 20px;
-    transition: left 0.3s ease; /* 애니메이션 */
-    border-top-right-radius: 20px;  /* 오른쪽 상단 둥글게 */
-    border-bottom-right-radius: 20px;  /* 오른쪽 하단 둥글게 */
-  }
-
-  .sidebar.open {
-    left: 0; /* 사이드바가 열리면 화면에 표시 */
-  }
-
-  .header {
-    position: fixed; /* 항상 상단에 고정 */
-    top: 5px;
-    left: 0;
-    right: 0;
-    min-width: 100vw; /* 최소한 화면 전체 너비 */
-    display: flex;
-    align-items: center;
-    justify-content: space-between; 
-    background-color: rgb(255, 255, 255); 
-    color: #0a0a23;
-    padding: 10px 20px; /* 패딩 추가 */
-    box-sizing: border-box; /* 패딩 포함한 크기 조정 */
-    height: 60px; /* 높이 지정 */
-    z-index: 1000; /* 다른 요소보다 위에 표시 */
-}
-
-/* 왼쪽 섹션 스타일 */
-.left-section {
+.main-container {
+  height: 100vh;
+  background-color: #d5d8f6;
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 10px; /* 아이콘과 텍스트 간격 */
-  margin-left: 10px; /* 왼쪽 여백 */
 }
 
-/* 오른쪽 섹션 스타일 */
-.right-section {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* 아이콘 간격 */
-  margin-right: 10px; /* 오른쪽 여백 */
+.main-box {
+  text-align: center;
+  padding: 2rem;
 }
 
-/* 아이콘 스타일 (조정 가능) */
-.header i {
-  font-size: 30px;
+.main-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #4b4faf;
+  margin-bottom: 1.5rem;
+}
+
+.main-description {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #4b4faf;
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.main-button {
+  margin-top: 2rem;
+  background-color: #4b4faf;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 0.7rem 2rem;
+  border: none;
+  border-radius: 9999px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-  .header h1 {
-    margin: 0;
-    text-align: center;
-  }
-
-  
-.header img{
-  width: 50px;
-  height: auto;
-  border-radius: 20%;
+.main-button:hover {
+  background-color: #3a3f99;
 }
-  
-
-  .search-container {
-    position: relative; /* 내부 아이콘을 절대 위치로 배치하기 위해 설정 */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 400px; /* 검색창을 오른쪽으로 이동 */
-    margin-top: 500px; /* 검색창을 아래로 이동 */
-    width: 700px; /* 검색창의 너비 */
-    border: 2px solid rgb(220, 213, 254);
-    border-radius: 25px; /* 둥근 모서리 */
-    background-color: rgb(220, 213, 254);
-    padding: 5px;
-}
-
-/* 검색 입력창 */
-.search-bar {
-    width: 100%; /* 부모(.search-container) 너비에 맞춤 */
-    padding: 10px 15px 10px 50px; /* 왼쪽 공간 확보 (아이콘 위치) */
-    font-size: 16px;
-    border: none; /* 테두리 제거 */
-    border-radius: 25px; /* 둥근 모서리 */
-    outline: none;
-    background: none; /* 부모 배경색 유지 */
-}
-
-/* 검색창 안의 돋보기 아이콘 */
-.search-container i {
-    position: absolute;
-    left: 15px; /* 아이콘을 검색창 왼쪽에 배치 */
-    font-size: 20px;
-    color: black;
-}
-
-
-  .content {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  
-  .content h1 {
-    color: black;
-  }
-  

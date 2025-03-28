@@ -6,7 +6,6 @@ import './findPwd.css'; // CSS 파일 추가
 
 const FindPwd = () => {
     const [message, setMessage] = useState(''); {/*메세지 아래 호출 안해놔서 안나오는게 맞음 */}
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
     const navigate = useNavigate(); // React Router를 사용한 페이지 이동
 
     const [username, setUsername] = useState("");
@@ -27,11 +26,6 @@ const FindPwd = () => {
       fetchData();
     }, []);
 
-      // 사이드바 열기/닫기 함수
-    const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Find Pwd with", username);
@@ -39,15 +33,8 @@ const FindPwd = () => {
 
   return (
     <div className="container">
-        <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-          <h2>History</h2>
-            <ul>
-            </ul>
-        </div>
-        
       <div className="header">
         <div className="left-section">
-          <i className="fa-sharp fa-solid fa-bars" onClick={toggleSidebar}></i>
           <img src={mainlogo} alt="logo" />
           <h1>CPR</h1>
         </div>

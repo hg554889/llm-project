@@ -6,7 +6,6 @@ import './findId.css'; // CSS 파일 추가
 
 const FindId = () => {
     const [message, setMessage] = useState(''); {/*메세지 아래 호출 안해놔서 안나오는게 맞음 */}
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
     const navigate = useNavigate(); // React Router를 사용한 페이지 이동
 
     const [email, setEmail] = useState("");
@@ -30,11 +29,6 @@ const FindId = () => {
 
       fetchData();
     }, []);
-
-      // 사이드바 열기/닫기 함수
-    const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
 
   // 이메일 형식 검증 함수 추가
   const isValidEmail = (email) => {
@@ -101,15 +95,8 @@ const FindId = () => {
 
   return (
     <div className="container">
-        <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-          <h2>History</h2>
-            <ul>
-            </ul>
-        </div>
-        
       <div className="header">
         <div className="left-section">
-          <i className="fa-sharp fa-solid fa-bars" onClick={toggleSidebar}></i>
           <img src={mainlogo} alt="logo" />
           <h1>CPR</h1>
         </div>

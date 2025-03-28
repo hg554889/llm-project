@@ -4,24 +4,6 @@ body {
     background-color: white;
   }
 
-  .sidebar {
-    position: fixed;
-    top: 13%;
-    left: -250px; /* 초기 위치는 화면 밖 */
-    width: 250px;
-    height: 75%;
-    background-color: rgb(220, 213, 254);
-    color: green;
-    padding: 20px;
-    transition: left 0.3s ease; /* 애니메이션 */
-    border-top-right-radius: 20px;  /* 오른쪽 상단 둥글게 */
-    border-bottom-right-radius: 20px;  /* 오른쪽 하단 둥글게 */
-  }
-
-  .sidebar.open {
-    left: 0; /* 사이드바가 열리면 화면에 표시 */
-  }
-
   .header {
     position: fixed; /* 항상 상단에 고정 */
     top: 5px;
@@ -74,105 +56,73 @@ body {
 
 /* 🌟 전체 페이지 중앙 정렬 */
 .login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px); /* Adjust based on header height */
+    padding: 20px;
 }
 
 /* 🌟로그인 박스 스타일 */
 .login-box {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  width: 320px;
+    width: 400px;
+    background: white;
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
-  font-size: 24px;
-  font-weight: bold;
-  padding-bottom: 10px;
+.login-box h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
 }
-
 
 /* 입력 필드 스타일 */
-input {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-/* 체크박스 & 링크 스타일 */
-.options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  margin: 10px 0;
-  white-space: nowrap; /* 줄바꿈 방지 */
-  width: 100%; 
-
-}
-
-.options label {
-  display: flex;
-  align-items: center;
-  color: #888;
-  gap: 5px; 
-
-}
-
-.options input[type="checkbox"] {
-  margin-right: 5px;
-}
-
-.options a { /*find/pwd*/
-  color: #888;
-  font-weight: bold;
-  margin-left: auto;
-}
-
-.options a:hover {
-  color: #333;
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
 /* 로그인 버튼 스타일 */
-.continue-btn {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  color: white;
-  background-color:  rgb(220, 213, 254);
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease;
+.login-box .continue-btn {
+    width: 100%;
+    padding: 12px;
+    margin: 20px 0;
+    background-color: rgb(220, 213, 254);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
-.continue-btn:hover {
-  background-color: #bcbcbc;
+.login-box .continue-btn:hover {
+    background-color: #bcbcbc;
+}
+
+/* 체크박스 & 링크 스타일 */
+.login-box .options {
+    margin: 15px 0;
+    text-align: right;
+}
+
+.login-box .options a {
+    color: #007bff;
+    text-decoration: none;
 }
 
 /* 로그인 링크 */
-.register-link {
-  display: block;
-  margin-top: 15px;
-  font-size: 14px;
-  color: #888;
-  font-weight: bold;
-}
-
-.register-link:hover {
-  color: #555;
+.login-box .register-link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #007bff;
+    text-decoration: none;
 }
 
 /* 🌟 반응형 디자인 (작은 화면에서도 보기 좋게) */

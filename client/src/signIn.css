@@ -4,24 +4,6 @@ body {
     background-color: white;
   }
 
-  .sidebar {
-    position: fixed;
-    top: 13%;
-    left: -250px; /* 초기 위치는 화면 밖 */
-    width: 250px;
-    height: 75%;
-    background-color: rgb(220, 213, 254);
-    color: green;
-    padding: 20px;
-    transition: left 0.3s ease; /* 애니메이션 */
-    border-top-right-radius: 20px;  /* 오른쪽 상단 둥글게 */
-    border-bottom-right-radius: 20px;  /* 오른쪽 하단 둥글게 */
-  }
-
-  .sidebar.open {
-    left: 0; /* 사이드바가 열리면 화면에 표시 */
-  }
-
   .header {
     position: fixed; /* 항상 상단에 고정 */
     top: 5px;
@@ -218,6 +200,16 @@ input {
 
 .popup button:hover {
   background-color: #45a049;
+}
+
+/* Remove any sidebar related styles if they exist */
+
+.signin-page-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f5;
 }
 
 

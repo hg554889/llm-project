@@ -131,7 +131,7 @@ const FindId = () => {
           <form onSubmit={handleSubmit}>
             <input
               type="text"
-              placeholder="E-Mail 입력"
+              placeholder="E-Mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

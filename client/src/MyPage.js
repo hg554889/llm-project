@@ -128,12 +128,12 @@ const Mypage = () => {
                    <h1>CPR</h1>
                   </div>
         
-                  <h1 onClick={() => navigate('/userMain')}>Code Programming Runner</h1> {/* 페이지 어디로 옮겨야 되는지 모르겠음 */}
+                  <h1 onClick={() => navigate('/userMain')}>Code Programming Runner</h1> 
                 
                   <div className='right-section'>
                   <i className="fa-solid fa-user" onClick={() => navigate('/myPage')}></i>  
-                  {/* 페이지 어디로 옮겨야 되는지 모르겠음 */}
-                  <i class="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
+                 
+                  <i class="fa-solid fa-layer-group" onClick={() => navigate('/NoteP')}></i>
                   </div>
                 </div>
           
@@ -157,7 +157,6 @@ const Mypage = () => {
       <li onClick={() => navigate('/myPage')}>My Page</li>
       <li onClick={() => navigate('/savedQ')}>Saved Questions</li>
       <li onClick={() => navigate('/savedLink')}>Saved Links</li>
-      <li onClick={() => navigate('/note')}>Note</li>
       <li onClick={handleLogout}>Log out</li>
     </ul>
     

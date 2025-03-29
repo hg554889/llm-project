@@ -60,7 +60,7 @@ const Login_temp = () => {
           
         <div className='right-section'>
           <i className="fa-solid fa-user-plus" onClick={() => navigate('/login')}></i>
-          <i className="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
+          <i className="fa-solid fa-layer-group" ></i>
         </div>
       </div>
 
@@ -79,14 +79,14 @@ const Login_temp = () => {
             />
             <input
               type="password"
-              placeholder="Password"
+              placeholder="Reset Password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               required
             />
             <input
               type="password"
-              placeholder="Password Checking"
+              placeholder="Password Check"
               value={newPasswordConfirm}
               onChange={(e) => setNewPasswordConfirm(e.target.value)}
               required

@@ -6,14 +6,13 @@ import SignIn from './signIn.js';    // 회원가입 페이지
 import FindId from './findId.js';    // 아이디 찾기 페이지
 import FindPwd from './findPwd.js';    // 비밀번호 찾기 페이지
 import LoginTemp from './login_temp.js';    // 로그인 템플릿 페이지
-import EnvirPage from './envir.js';  // 환경 설정 페이지
 import UserMainPage from './UserMain.js';  // 유저 메인 페이지
 
 
 import MyPage from './MyPage.js';    // 마이 페이지(로그인 되면 아이콘 바뀌는데)
 import SavedQ from'./SavedQuestion.js' //저장된 질문 페이지
 import SavedLink from './SavedLink.js' //저장된 링크 페이지
-import Note from './Note.js' //노트 페이지
+import NotePage from './NoteP.js';  // 진짜 노트 페이지
 
 const Router = () => {
   return (
@@ -24,12 +23,11 @@ const Router = () => {
       <Route path="/findId" element={<FindId />} />
       <Route path="/findPwd" element={<FindPwd />} />
       <Route path="/loginTemp" element={<LoginTemp />} />
-      <Route path="/envir" element={<EnvirPage />} />
       <Route path="/userMain" element={<UserMainPage />} />
       <Route path="/myPage" element={<MyPage />} />
       <Route path="/savedQ" element={<SavedQ />} />
       <Route path="/savedLink" element={<SavedLink />} />
-      <Route path="/note" element={<Note />} />
+      <Route path="/noteP" element={<NotePage />} />
     </Routes>
   );
 }

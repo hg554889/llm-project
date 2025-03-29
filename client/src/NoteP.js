@@ -1,27 +1,36 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import mainlogo from './img/mainlogo.png'; 
-import "./Note.css";
+import "./NoteP.css";
 
 const Note = () => {
     const navigate = useNavigate();
-    const [showSidebar, setShowSidebar] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+        
     const [isGridView, setIsGridView] = useState(true);
     const [notes, setNotes] = useState([]);
-    const [userData, setUserData] = useState({
-        username: '',
-        email: ''
-    });
+    const [userData, setUserData] = useState({ username: '', email: '' });
     const [isCreating, setIsCreating] = useState(false);
-    const [newNote, setNewNote] = useState({
-        title: '',
-        content: ''
-    });
+    const [newNote, setNewNote] = useState({ title: '', content: '' });
     const [selectedNote, setSelectedNote] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editedNote, setEditedNote] = useState({ title: '', content: '' });
+
+    const toggleDropdown = () => {
+        setIsOpen((prev) => !prev);
+      };
+
+    const handleLogout = () => {
+        localStorage.removeItem('userEmail');
+        navigate('/');
+    };
 
     const fetchNotes = useCallback(async () => {
         try {
@@ -61,14 +70,14 @@ const Note = () => {
                 }
             } catch (err) {
                 console.error('사용자 정보 로딩 오류:', err);
+            }finally {
+                setLoading(false);
             }
         };
 
         fetchUserData();
         fetchNotes();
     }, [navigate, fetchNotes]);
-
-    const toggleSidebar = () => setShowSidebar(!showSidebar);
 
     const handleCreateNote = async () => {
         if (!newNote.title || !newNote.content) {
@@ -91,13 +100,9 @@ const Note = () => {
             });
 
             if (response.status === 201) {
-                // 노트 저장 후 목록 새로고침
                 await fetchNotes();
-                
-                // 입력 폼 초기화 및 닫기
                 setIsCreating(false);
                 setNewNote({ title: '', content: '' });
-                
                 alert("노트가 성공적으로 저장되었습니다.");
             } else {
                 throw new Error('노트 저장에 실패했습니다.');
@@ -134,39 +139,69 @@ const Note = () => {
         }
     };
 
+    /*노트 삭제 하고 싶어!!!!*/ 
+    const handleDeleteNote = async (noteId) => {
+        const confirmed = window.confirm("정말 이 노트를 삭제하시겠습니까?");
+        if (!confirmed) return;
+      
+        try {
+          const userEmail = localStorage.getItem('userEmail');
+      
+          // ✅ userEmail을 쿼리스트링으로 넘긴다!!
+          await axios.delete(`http://localhost:3001/memo/${noteId}?userId=${userEmail}`);
+      
+          await fetchNotes();
+          alert("노트가 삭제되었습니다.");
+        } catch (err) {
+          console.error('노트 삭제 오류:', err);
+          alert(err.response?.data?.message || "노트 삭제에 실패했습니다.");
+        }
+      };
+
     return (
         <div className="note-page-container">
             <div className="header">
                 <div className='left-section'>
-                    <i className="fa-sharp fa-solid fa-bars" onClick={toggleSidebar}></i>
-                    <img src={mainlogo} alt='logo' /> {/* ← 이 부분이 mainlogo.png 로고 */}
+                    <i className="fa-sharp fa-solid fa-bars"></i>
+                    <img src={mainlogo} alt='logo' />
                     <h1>CPR</h1>
                 </div>
 
                 <h1 onClick={() => navigate('/userMain')}>Code Programming Runner</h1>
                 
                 <div className='right-section'>
-                    <i className="fa-solid fa-user" onClick={() => navigate('')}></i>
-                    <i className="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
+                    <i className="fa-solid fa-user" onClick={toggleDropdown}></i>
+                    {isOpen && (
+                        <div className="profile-dropdown" ref={dropdownRef}>
+                            <div className="profile-header">
+                                <div className="profile-circle" />
+                                <div className="profile-info">
+                                    {loading ? (
+                                        <p>로딩 중...</p>
+                                    ) : error ? (
+                                        <p>{error}</p>
+                                    ) : (
+                                        <>
+                                        <p className="profile-name">{userData.username}</p>
+                                        <p className="profile-email">{userData.email}</p>
+                                        </>
+                                        )}
+                                </div>
+                            </div>
+
+              <ul className="profile-menu">
+                <li onClick={()=>navigate('/myPage')}>My Page</li>
+                <li onClick={()=>navigate('/savedQ')}>Saved Questions</li>
+                <li onClick={()=>navigate('/savedLink')}>Saved Links</li>
+                <li onClick={handleLogout}>Log out</li>
+              </ul>
+            </div>
+          )}
+                    <i className="fa-solid fa-layer-group"></i>
                 </div>
             </div>
 
             <div className="note-content">
-                {showSidebar && (
-                    <div className="note-sidebar">
-                        <div className="profile-circle-large" />
-                        <p className="side-name">{userData.username}</p>
-                        <p className="side-email">{userData.email}</p>
-                        <ul className="side-menu">
-                            <li onClick={() => navigate('/myPage')}>My Page</li>
-                            <li onClick={() => navigate('/savedQ')}>Saved Questions</li>
-                            <li onClick={() => navigate('/savedLink')}>Saved Link</li>
-                            <li onClick={() => navigate('/note')}>Note</li>
-                            <li onClick={() => navigate('/')}>Log Out</li>
-                        </ul>
-                    </div>
-                )}
-
                 <div className="note-main">
                     <div className="note-title-wrapper">
                         <h2 className="note-title">NOTE</h2>
@@ -193,17 +228,16 @@ const Note = () => {
 
                     <div className={isGridView ? "note-grid" : "note-list"}>
                         {notes.map((note) => (
-                            <div 
-                                className="note-card" 
-                                key={note._id}
-                                onClick={() => handleNoteClick(note)}
-                            >
-                                <h3>{note.title}</h3>
+                            <div className="note-card" key={note._id}>
+                                <div className="note-card-top">
+                                    <h3 onClick={() => handleNoteClick(note)}>{note.title}</h3>
+                                    <button className="delete-button" onClick={() => handleDeleteNote(note._id)}>🗑</button>
+                                </div>
                             </div>
                         ))}
                     </div>
 
-                    {/* 노트 상세보기 모달 */}
+                    {/* 노트 상세보기 모달 (편집용) */}
                     {selectedNote && (
                         <div className="note-modal">
                             <div className="note-modal-content">
@@ -212,17 +246,11 @@ const Note = () => {
                                         <input
                                             type="text"
                                             value={editedNote.title}
-                                            onChange={(e) => setEditedNote({
-                                                ...editedNote,
-                                                title: e.target.value
-                                            })}
+                                            onChange={(e) => setEditedNote({ ...editedNote, title: e.target.value })}
                                         />
                                         <textarea
                                             value={editedNote.content}
-                                            onChange={(e) => setEditedNote({
-                                                ...editedNote,
-                                                content: e.target.value
-                                            })}
+                                            onChange={(e) => setEditedNote({ ...editedNote, content: e.target.value })}
                                         />
                                         <div className="modal-buttons">
                                             <button onClick={handleEditNote}>Save</button>

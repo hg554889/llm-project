@@ -105,13 +105,13 @@ const FindId = () => {
 
         <div className="right-section">
           <i className="fa-solid fa-user-plus" onClick={() => navigate('/login')}></i>
-          <i className="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
+          <i className="fa-solid fa-layer-group" ></i>
         </div>
       </div>
 
       <div className="findInfo-container">
         <div className="findInfo-box">
-          <h2>Find Your ID / E-mail</h2>
+          <h2>Find User Name / Password</h2>
 
           {/* 🔹 탭 버튼 */}
           <div className="find-tabs">
@@ -131,7 +131,7 @@ const FindId = () => {
           <form onSubmit={handleSubmit}>
             <input
               type="text"
-              placeholder="E-Mail 또는 Username 입력"
+              placeholder="E-Mail 입력"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

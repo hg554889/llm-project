@@ -43,7 +43,7 @@ const FindPwd = () => {
 
         <div className="right-section">
           <i className="fa-solid fa-user-plus" onClick={() => navigate('/login')}></i>
-          <i className="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
+          <i className="fa-solid fa-layer-group" ></i>
         </div>
       </div>
 
@@ -56,7 +56,7 @@ const FindPwd = () => {
             <button
               className={activeTab === 'findId' ? 'active' : ''}
               onClick={() => {setActiveTab('findId'); navigate('/findId'); }}>
-              Find E-Mail
+              Find User Name / E-Mail
             </button>
             <button
               className={activeTab === 'findPwd' ? 'active' : ''}

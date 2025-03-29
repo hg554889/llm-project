@@ -112,17 +112,29 @@ body {
 }
 
 .login-box .options a {
-    color: #007bff;
-    text-decoration: none;
+    color: #888;
+    font-weight:bold;
+    font-size: 14px;
 }
 
-/* 로그인 링크 */
+.login-box .options a:hover {
+    color: #555;
+}
+
+
+/* 회원가입 링크 */
 .login-box .register-link {
     display: block;
     text-align: center;
-    margin-top: 15px;
-    color: #007bff;
-    text-decoration: none;
+    margin-top: 14px;
+    color: #888;
+    font-weight: bold;
+    font-size: 18px;
+
+}
+
+.login-box .register-link:hover {
+    color: #555;
 }
 
 /* 🌟 반응형 디자인 (작은 화면에서도 보기 좋게) */

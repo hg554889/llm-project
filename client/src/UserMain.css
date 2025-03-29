@@ -13,7 +13,7 @@ body {
   height: 600px;
   z-index: 999;
   background-color: rgb(220, 213, 254);
-  color: green;
+  color: rgb(111, 1, 111);
   padding: 20px;
   transition: left 0.3s ease; /* 애니메이션 */
   border-top-right-radius: 20px; /* 오른쪽 상단 둥글게 */
@@ -87,6 +87,7 @@ body {
   z-index: 1000; /* 다른 요소보다 위 */
 
   background-color: rgb(220, 213, 254);
+  margin-left: 370px;
   border-radius: 25px;
   padding: 20px;
   display: flex;
@@ -103,6 +104,7 @@ body {
   position: relative;
   margin: 0 auto;
   width: 95%; /* 컨테이너 내 너비 확장 */
+  
 }
 
 .button-group {
@@ -179,6 +181,7 @@ body {
   border-radius: 12px;
   animation: fadeIn 0.2s ease-in-out;
   z-index: 9999;
+  
 }
 
 /* fadeIn 애니메이션 */
@@ -246,6 +249,8 @@ body {
   margin: 80px auto 0; /* 위쪽 100px 정도 여백 (헤더 때문에) */
   padding: 0 20px 200px 20px; /* 아래쪽 공간 확보 (검색창 높이보다 살짝 여유롭게) */
   background-color: transparent;
+  margin-left: 250px;
+
 }
 
 /* 채팅 메시지 컨테이너 수정 */
@@ -297,6 +302,7 @@ body {
   height: 80%;
   color: #666;
   margin: 300px 0; /* 상하 여백 증가 */
+  margin-right: 200px;
 }
 
 .empty-chat h2 {
@@ -569,7 +575,7 @@ body {
 
 .history-title {
   font-size: 14px;
-  color: #fff;
+  color: blue;
 }
 
 .history-date {

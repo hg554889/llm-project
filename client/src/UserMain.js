@@ -5,7 +5,7 @@ import mainlogo from './img/mainlogo.png';
 import './UserMain.css';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
-import nlp from 'compromise';
+//import nlp from 'compromise';
 import 'highlight.js/styles/github.css';
 
 const keywordMap = {
@@ -662,12 +662,11 @@ const UserMain = () => {
                 <li onClick={()=>navigate('/myPage')}>My Page</li>
                 <li onClick={()=>navigate('/savedQ')}>Saved Questions</li>
                 <li onClick={()=>navigate('/savedLink')}>Saved Links</li>
-                <li onClick={()=>navigate('/note')}>Note</li>
                 <li onClick={handleLogout}>Log out</li>
               </ul>
             </div>
           )}
-          <i className="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
+          <i className="fa-solid fa-layer-group" onClick={() => navigate('/noteP')}></i>
         </div>
       </div>
 

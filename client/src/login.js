@@ -84,7 +84,7 @@ const Login = () => {
                     
                 <div className='right-section'>
                     <i className="fa-solid fa-user-plus" onClick={() => navigate('/login')}></i>
-                    <i className="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
+                    <i className="fa-solid fa-layer-group"></i>
                 </div>
             </div>
 

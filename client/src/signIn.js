@@ -69,7 +69,7 @@ const SignIn = () => {
                 <h1 onClick={() => navigate('/')}>Code Programming Runner</h1>
                 <div className='right-section'>
                     <i className="fa-solid fa-user-plus" onClick={() => navigate('/login')}></i>
-                    <i className="fa-solid fa-layer-group" onClick={() => navigate('/envir')}></i>
+                    <i className="fa-solid fa-layer-group"></i>
                 </div>
             </div>
 
@@ -125,10 +125,11 @@ const SignIn = () => {
                             Continue
                         </button>
                     </form>
-
+                    <p className="have-account">
                     <a href="/login" onClick={(e) => {e.preventDefault(); navigate('/login');}}>
                         Do You Have Your Own Account? Log in!
                     </a>
+                    </p>
                 </div>
             </div>
 

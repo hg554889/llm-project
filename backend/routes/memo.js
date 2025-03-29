@@ -10,10 +10,10 @@ router.get(
     asyncHandler(async (req, res) => {
         const { userId } = req.query;
         if (!userId) {
-            return res.status(400).json({ message: "사용자 ID가 필요합니다." });
+            return res.status(400).json({ message: "사용자 이메일이 필요합니다." });
         }
 
-        const user = await User.findById(userId);
+        const user = await User.findOne({ email: userId });
         if (!user) {
             return res.status(404).json({ message: "사용자를 찾을 수 없습니다." });
         }
@@ -32,11 +32,11 @@ router.post(
 
         if (!title || !content || !userId) {
             return res.status(400).json({
-                message: "제목, 내용, 사용자 ID를 모두 입력해주세요."
+                message: "제목, 내용, 사용자 이메일을 모두 입력해주세요."
             });
         }
 
-        const user = await User.findById(userId);
+        const user = await User.findOne({ email: userId });
         if (!user) {
             return res.status(404).json({ message: "사용자를 찾을 수 없습니다." });
         }
@@ -57,10 +57,10 @@ router.get(
     asyncHandler(async (req, res) => {
         const { userId } = req.query;
         if (!userId) {
-            return res.status(400).json({ message: "사용자 ID가 필요합니다." });
+            return res.status(400).json({ message: "사용자 이메일이 필요합니다." });
         }
 
-        const user = await User.findById(userId);
+        const user = await User.findOne({ email: userId });
         if (!user) {
             return res.status(404).json({ message: "사용자를 찾을 수 없습니다." });
         }
@@ -88,10 +88,10 @@ router.put(
         const { title, content, userId } = req.body;
         
         if (!userId) {
-            return res.status(400).json({ message: "사용자 ID가 필요합니다." });
+            return res.status(400).json({ message: "사용자 이메일이 필요합니다." });
         }
 
-        const user = await User.findById(userId);
+        const user = await User.findOne({ email: userId });
         if (!user) {
             return res.status(404).json({ message: "사용자를 찾을 수 없습니다." });
         }
@@ -127,10 +127,10 @@ router.delete(
         const { userId } = req.query;
         
         if (!userId) {
-            return res.status(400).json({ message: "사용자 ID가 필요합니다." });
+            return res.status(400).json({ message: "사용자 이메일이 필요합니다." });
         }
 
-        const user = await User.findById(userId);
+        const user = await User.findOne({ email: userId });
         if (!user) {
             return res.status(404).json({ message: "사용자를 찾을 수 없습니다." });
         }

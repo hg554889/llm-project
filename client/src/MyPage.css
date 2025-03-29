@@ -220,3 +220,64 @@ body {
 .interests-container {
     margin-top: 10px;
 }
+
+.saved-links-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.saved-links-list-container {
+  margin-top: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 8px;
+  background-color: rgba(128, 0, 128, 0.1);
+  padding: 10px;
+}
+
+.saved-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.saved-link-item {
+  padding: 8px;
+  border-bottom: 1px solid rgba(128, 0, 128, 0.2);
+}
+
+.saved-link-item:last-child {
+  border-bottom: none;
+}
+
+.saved-link-item a {
+  color: #6200ee;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.saved-link-item p {
+  margin: 5px 0 0 0;
+  font-size: 0.9em;
+  color: #666;
+}
+
+/* 스크롤바 스타일링 */
+.saved-links-list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.saved-links-list-container::-webkit-scrollbar-track {
+  background: rgba(128, 0, 128, 0.1);
+  border-radius: 4px;
+}
+
+.saved-links-list-container::-webkit-scrollbar-thumb {
+  background: rgba(128, 0, 128, 0.3);
+  border-radius: 4px;
+}
+
+.saved-links-list-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 0, 128, 0.5);
+}

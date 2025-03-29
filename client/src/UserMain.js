@@ -5,7 +5,25 @@ import mainlogo from './img/mainlogo.png';
 import './UserMain.css';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
+import nlp from 'compromise';
 import 'highlight.js/styles/github.css';
+
+const keywordMap = {
+  array: ['배열', '리스트', 'array'],
+  string: ['문자열', 'string'],
+  sort: ['정렬', 'sort', '오름차순', '내림차순'],
+  search: ['탐색', 'search', '찾기', '이진 탐색'],
+  graph: ['그래프', 'graph'],
+  tree: ['트리', 'tree'],
+  stack: ['스택', 'stack'],
+  queue: ['큐', 'queue'],
+  recursive: ['재귀', 'recursive'],
+  dynamic: ['동적 계획법', 'dp', 'dynamic'],
+  'linked list': ['연결 리스트', 'linked list'],
+  hash: ['해시', 'hash'],
+  binary: ['이진수', 'binary'],
+  algorithm: ['알고리즘', 'algorithm']
+};
 
 const MarkdownComponents = {
   code({ node, inline, className, children, ...props }) {
@@ -45,6 +63,30 @@ const UserMain = () => {
   const [isNewChat, setIsNewChat] = useState(false);
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [chatSessions, setChatSessions] = useState([]);
+  const [problems, setProblems] = useState([]); // 백준 문제 목록
+  const [showProblems, setShowProblems] = useState(false); // 문제 목록 표시 여부
+  const [extractedKeywords, setExtractedKeywords] = useState([]);
+  const [selectedKeywords, setSelectedKeywords] = useState([]);
+  const [showKeywordSelection, setShowKeywordSelection] = useState(false);
+  const predefinedKeywords = [
+    'math', 'implementation', 'dp', 'data_structures', 'graphs',
+    'greedy', 'string', 'bruteforcing', 'graph_traversal', 'sorting',
+    'ad_hoc', 'geometry', 'number_theory', 'trees', 'segtree',
+    'binary_search', 'arithmetic', 'constructive', 'simulation', 'prefix_sum',
+    'bfs', 'combinatorics', 'case_work', 'dfs', 'shortest_path',
+    'bitmask', 'hash_set', 'dijkstra', 'backtracking', 'sweeping'
+  ];
+
+  // 키워드 선택 처리 함수
+  const handleKeywordSelect = (keyword) => {
+    setSelectedKeywords(prev => {
+      if (prev.includes(keyword)) {
+        return prev.filter(k => k !== keyword);
+      } else {
+        return [...prev, keyword];
+      }
+    });
+  };
 
   // 사용자 정보 및 기본 데이터 로드
   useEffect(() => {
@@ -198,12 +240,17 @@ const UserMain = () => {
 
   const fetchChatSessions = async () => {
     try {
+      const userEmail = localStorage.getItem('userEmail');
+      if (!userEmail) return;
+      
       const response = await axios.get('http://localhost:3001/chat/sessions', {
-        params: { userEmail: localStorage.getItem('userEmail') }
+        params: { userEmail }
       });
       
       if (response.data.success) {
-        setChatSessions(response.data.sessions);
+        setChatSessions(response.data.sessions.sort((a, b) => 
+          new Date(b.lastMessageAt) - new Date(a.lastMessageAt)
+        ));
       }
     } catch (error) {
       console.error('세션 목록 조회 오류:', error);
@@ -222,13 +269,34 @@ const UserMain = () => {
     }
   };
 
+  // 새로운 채팅 시작 함수 수정
+  const startNewChat = async () => {
+    try {
+      const response = await axios.post('http://localhost:3001/chat/session', {
+        userEmail: localStorage.getItem('userEmail'),
+        title: "새로운 채팅" // 기본 제목 설정
+      });
+      
+      if (response.data.success) {
+        setCurrentSessionId(response.data.sessionId);
+        setChatHistory([]); // 채팅 기록 초기화
+        setSearchQuery('');
+        setIsNewChat(true);
+        await fetchChatSessions(); // 세션 목록 새로고침
+      }
+    } catch (error) {
+      console.error('새 채팅 세션 생성 오류:', error);
+    }
+  };
+
+  // handleSendQuestion 함수 수정
   const handleSendQuestion = async (e) => {
     if (e) e.preventDefault();
     if (!searchQuery.trim() || isProcessing) return;
 
     // 새로운 채팅이면 세션 생성
     if (!currentSessionId) {
-      await createNewSession();
+      await startNewChat();
     }
 
     const question = searchQuery.trim();
@@ -242,8 +310,9 @@ const UserMain = () => {
       timestamp: new Date().toISOString()
     };
 
+    // 현재 세션의 채팅 기록에 추가
     setChatHistory(prev => [...prev, newUserMessage]);
-    saveMessageToDB(newUserMessage);
+    await saveMessageToDB(newUserMessage);
 
     const loadingMessageId = Date.now() + 1;
     const loadingMessage = {
@@ -268,40 +337,21 @@ const UserMain = () => {
       }
 
       const aiMessage = {
-        id: Date.now() + 2,
+        sessionId: currentSessionId,
         role: 'assistant',
         content: String(aiResponseContent),
         timestamp: new Date().toISOString()
       };
 
-      // 로딩 메시지 제거 후, AI 메시지 추가
       setChatHistory(prev => {
-        const filteredMessages = prev.filter(msg => msg.id !== loadingMessageId);
+        const filteredMessages = prev.filter(msg => !msg.isLoading);
         return [...filteredMessages, aiMessage];
       });
-      saveMessageToDB(aiMessage);
-
-      // History 업데이트
-      if (isNewChat) {
-        const userEmail = localStorage.getItem('userEmail');
-        const historyItems = JSON.parse(localStorage.getItem(`searchHistory_${userEmail}`) || '[]');
-        const currentHistory = historyItems[0];
-        
-        if (currentHistory) {
-          currentHistory.messages = [...chatHistory, newUserMessage, aiMessage];
-          localStorage.setItem(`searchHistory_${userEmail}`, JSON.stringify(historyItems));
-        }
-      }
+      
+      await saveMessageToDB(aiMessage);
+      await fetchChatSessions(); // 세션 목록 업데이트
 
       setIsNewChat(false);
-
-      // 세션 목록 새로고침
-      const sessionsResponse = await axios.get('http://localhost:3001/chat/sessions', {
-        params: { userEmail: localStorage.getItem('userEmail') }
-      });
-      if (sessionsResponse.data.success) {
-        setChatSessions(sessionsResponse.data.sessions);
-      }
     } catch (error) {
       console.error('AI 응답 오류:', error);
       const errorMessage = {
@@ -393,6 +443,76 @@ const UserMain = () => {
     }
   };
 
+  // 선택된 키워드로 문제 검색
+  const searchWithSelectedKeywords = async () => {
+    if (selectedKeywords.length === 0) {
+      alert('키워드를 선택해주세요.');
+      return;
+    }
+
+    const tag = selectedKeywords.join(' ');
+    console.log('Searching with keywords:', tag);
+
+    try {
+      const encodedTag = encodeURIComponent(tag);
+      console.log('Encoded tag:', encodedTag);
+
+      const response = await axios.get(`http://localhost:3001/list/beakjoon`, {
+        params: { tag: encodedTag },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (response.data && response.data.length > 0) {
+        setProblems(response.data);
+        setShowProblems(true);
+        setShowKeywordSelection(false);
+      } else {
+        alert('관련 문제를 찾을 수 없습니다.');
+      }
+    } catch (error) {
+      console.error('문제 검색 실패:', error.response?.data || error.message);
+      alert('문제를 가져오는데 실패했습니다.');
+    }
+  };
+
+  const fetchProblems = async (tag) => {
+    console.log('Fetching problems with tag:', tag); // 디버깅용 로그
+    try {
+      if (!tag) {
+        console.error('No tags provided');
+        alert('관련 문제를 찾을 수 없습니다.');
+        return;
+      }
+
+      const encodedTag = encodeURIComponent(tag);
+      console.log('Encoded tag:', encodedTag); // 디버깅용 로그
+
+      const response = await axios.get(`http://localhost:3001/list/beakjoon`, {
+        params: { tag: encodedTag },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+      
+      console.log('API Response:', response.data); // 디버깅용 로그
+      
+      if (response.data && response.data.length > 0) {
+        setProblems(response.data);
+        setShowProblems(true);
+      } else {
+        alert('관련 문제를 찾을 수 없습니다.');
+      }
+    } catch (error) {
+      console.error('백준 문제 가져오기 실패:', error.response?.data || error.message);
+      alert('문제 목록을 가져오는데 실패했습니다. 다시 시도해주세요.');
+    }
+  };
+
+  // renderMessageContent 함수 수정
   const renderMessageContent = (message) => {
     if (message.isLoading) {
       return (
@@ -402,15 +522,76 @@ const UserMain = () => {
       );
     }
 
-    return message.role === 'assistant' ? (
-      <ReactMarkdown 
-        components={MarkdownComponents}
-        rehypePlugins={[rehypeHighlight]}
-      >
-        {message.content}
-      </ReactMarkdown>
-    ) : (
-      <pre>{message.content}</pre>
+    return (
+      <div>
+        {message.role === 'assistant' ? (
+          <>
+            <ReactMarkdown 
+              components={MarkdownComponents}
+              rehypePlugins={[rehypeHighlight]}
+            >
+              {message.content}
+            </ReactMarkdown>
+            <button 
+              className="additional-study-btn"
+              onClick={() => {
+                setExtractedKeywords(predefinedKeywords);
+                setSelectedKeywords([]);
+                setShowKeywordSelection(true);
+              }}
+            >
+              추가 학습
+            </button>
+            {showKeywordSelection && (
+              <div className="keyword-selection">
+                <h4>관련 키워드</h4>
+                <div className="keyword-list">
+                  {predefinedKeywords.map((keyword, index) => (
+                    <button
+                      key={index}
+                      className={`keyword-chip ${selectedKeywords.includes(keyword) ? 'selected' : ''}`}
+                      onClick={() => handleKeywordSelect(keyword)}
+                    >
+                      {keyword}
+                    </button>
+                  ))}
+                </div>
+                <div className="keyword-actions">
+                  <button onClick={searchWithSelectedKeywords}>선택한 키워드로 검색</button>
+                  <button onClick={() => setShowKeywordSelection(false)}>취소</button>
+                </div>
+              </div>
+            )}
+            {showProblems && problems.length > 0 && (
+              <div className="problem-list">
+                <h3>관련 백준 문제</h3>
+                <div className="problems">
+                  {problems.map((problem) => (
+                    <a 
+                      key={problem.problemId} 
+                      href={problem.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="problem-item"
+                    >
+                      <span className="problem-title">{problem.titleKo}</span>
+                      <span className="problem-level">Level: {problem.level}</span>
+                    </a>
+                  ))}
+                </div>
+                <button 
+                  className="close-problems-btn"
+                  onClick={() => setShowProblems(false)}
+                >
+                  닫기
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <pre>{message.content}</pre>
+        )}
+      </div>
     );
   };
 
@@ -493,9 +674,9 @@ const UserMain = () => {
       <div className="chat-display" ref={chatContainerRef}>
         {chatHistory.length > 0 && (
           <div className="chat-controls">
-            <button className="clear-chat-btn" onClick={clearChatHistory}>
+            {/* <button className="clear-chat-btn" onClick={clearChatHistory}>
               대화 내용 지우기
-            </button>
+            </button> */}
           </div>
         )}
 
@@ -514,7 +695,7 @@ const UserMain = () => {
               </div>
               <div className="message-content">
                 {renderMessageContent(message)}
-                <div className="message-time">
+                <div class="message-time">
                   {new Date(message.timestamp).toLocaleTimeString()}
                 </div>
               </div>
@@ -540,15 +721,7 @@ const UserMain = () => {
           <button 
             type="button" 
             className="new-chat-btn"
-            onClick={() => {
-              setChatHistory([]);
-              setSearchQuery('');
-              setIsNewChat(true); // 새로운 채팅 상태로 설정
-              const userEmail = localStorage.getItem('userEmail');
-              if (userEmail) {
-                localStorage.removeItem(`chatHistory_${userEmail}`);
-              }
-            }}
+            onClick={startNewChat} // 새로운 채팅 시작 함수 연결
           >
             새로운 채팅 시작
           </button>

@@ -15,6 +15,7 @@ const Mypage = () => {
     const [note, setNote] = useState('');
     const [interests, setInterests] = useState([]);
     const [isEditingInterests, setIsEditingInterests] = useState(false);
+    const [savedLinks, setSavedLinks] = useState([]);
 
     const availableInterests = [
         "Python", "Java", "JavaScript", "C/C++", "Ruby",
@@ -81,6 +82,15 @@ const Mypage = () => {
       fetchUserData();
     }, [navigate]);
 
+    useEffect(() => {
+        // 사용자별 저장된 링크 불러오기
+        const userEmail = localStorage.getItem('userEmail');
+        const savedLinksData = localStorage.getItem(`savedLinks_${userEmail}`);
+        if (savedLinksData) {
+            setSavedLinks(JSON.parse(savedLinksData));
+        }
+    }, []);
+
     // interests 저장 함수
     const saveInterests = async (updatedInterests) => {
       try {
@@ -138,7 +148,7 @@ const Mypage = () => {
       <p>{error}</p>
     ) : (
       <>
-        <p className="profile-name">{userData.username} &gt;</p>
+        <p className="profile-name">{userData.username}</p>
         <p className="profile-email">{userData.email}</p>
       </>
     )}
@@ -176,6 +186,23 @@ const Mypage = () => {
             {interests.map(interest => (
               <span key={interest} className="tag">#{interest}</span>
             ))}
+          </div>
+        </div>
+
+        {/* 저장된 링크 섹션 추가 */}
+        <div className="saved-links-section">
+          <strong>Saved Learning Resources</strong>
+          <div className="saved-links-list-container">
+            <div className="saved-links-list">
+              {savedLinks.map((link, index) => (
+                <div key={index} className="saved-link-item">
+                  <a href={link.url} target="_blank" rel="noopener noreferrer">
+                    {link.name}
+                  </a>
+                  <p>{link.description}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </>

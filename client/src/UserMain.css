@@ -242,7 +242,7 @@ body {
   position: relative;
   z-index: 1; /* 사이드바 보다 낮게 */
   width: 100%;
-  max-width: 800px; /* 더 좁게 조정 */
+  max-width: 1200px; /* 더 좁게 조정 */
   margin: 80px auto 0; /* 위쪽 100px 정도 여백 (헤더 때문에) */
   padding: 0 20px 200px 20px; /* 아래쪽 공간 확보 (검색창 높이보다 살짝 여유롭게) */
   background-color: transparent;
@@ -296,7 +296,7 @@ body {
   text-align: center;
   height: 80%;
   color: #666;
-  margin: 50px 0; /* 상하 여백 증가 */
+  margin: 300px 0; /* 상하 여백 증가 */
 }
 
 .empty-chat h2 {
@@ -320,7 +320,7 @@ body {
 }
 
 .chat-message.user {
-  margin-left: 350px;
+  margin-left: 500px;
   flex-direction: row-reverse;
 }
 
@@ -575,4 +575,129 @@ body {
 .history-date {
   font-size: 12px;
   color: #666;
+}
+
+/* 추가 학습 버튼 스타일 */
+.additional-study-btn {
+  background-color: #8c61ff;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.additional-study-btn:hover {
+  background-color: #7142ff;
+}
+
+/* 문제 목록 스타일 */
+.problem-list {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+}
+
+.problems {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.problem-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+  transition: transform 0.2s;
+}
+
+.problem-item:hover {
+  transform: translateX(5px);
+  background-color: #f0f0f0;
+}
+
+.problem-title {
+  font-weight: bold;
+}
+
+.problem-level {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.close-problems-btn {
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 15px;
+  padding: 5px 15px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.close-problems-btn:hover {
+  background-color: #d0d0d0;
+}
+
+/* 키워드 선택 스타일 */
+.keyword-selection {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+}
+
+.keyword-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.keyword-chip {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid #8c61ff;
+  background-color: white;
+  color: #8c61ff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.keyword-chip.selected {
+  background-color: #8c61ff;
+  color: white;
+}
+
+.keyword-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.keyword-actions button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.keyword-actions button:first-child {
+  background-color: #8c61ff;
+  color: white;
+}
+
+.keyword-actions button:last-child {
+  background-color: #e0e0e0;
+  color: #333;
 }

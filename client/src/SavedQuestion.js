@@ -141,7 +141,9 @@ const SavedQuestion = () => {
                             >
                                 <div className="question-header">
                                     <span className="question-title">
-                                        {session.title || "새로운 채팅"}
+                                    {session.title && session.title !== "새로운 채팅"
+                                        ? session.title
+                                        : session.messages?.[0]?.content?.substring(0, 20) || "새로운 채팅"}
                                     </span>
                                     <span className="question-date">
                                         {new Date(session.lastMessageAt).toLocaleDateString()}

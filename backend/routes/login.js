@@ -51,22 +51,7 @@ router.post('/', asyncHandler(async (req, res) => {
             });
         }
         
-        // 사용자 정보 반환 (비밀번호 제외)
-        const userInfo = {
-            _id: user._id,
-            username: user.username,
-            email: user.email
-        };
-
-        // 로그인 성공
-        return res.status(200).json({
-            success: true,
-            message: '로그인 성공',
-            user: userInfo
-        });
-
-        /* 
-        // 실제 배포 환경용 비밀번호 검증 코드
+        // 비밀번호 검증
         const isMatch = await bcrypt.compare(password, user.password);
         
         if (!isMatch) {
@@ -89,7 +74,6 @@ router.post('/', asyncHandler(async (req, res) => {
             message: '로그인 성공',
             user: userInfo
         });
-        */
     } catch (error) {
         console.error('로그인 처리 중 오류 발생:', error);
         return res.status(500).json({

@@ -12,21 +12,6 @@ const Login_temp = () => {
     const [username, setUsername] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
-  
-    // API 호출 (처음 1번 실행)
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get('http://localhost:3001/api/message');
-          setMessage(response.data.message);
-        } catch (error) {
-          console.error('API 호출 오류:', error);
-          setMessage('API 호출 실패');
-        }
-      };
-
-      fetchData();
-    }, []);
 
       // 사이드바 열기/닫기 함수
     const toggleSidebar = () => {

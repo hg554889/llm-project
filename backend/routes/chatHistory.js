@@ -45,23 +45,34 @@ router.get('/messages/:sessionId', async (req, res) => {
 router.post('/message', async (req, res) => {
   const { sessionId, role, content } = req.body;
   try {
+    if (!sessionId) {
+      return res.status(400).json({ success: false, error: "sessionId가 없습니다." });
+    }
+
     const message = new ChatMessage({ sessionId, role, content });
     await message.save();
-    
-    // 세션의 lastMessageAt 업데이트
-    await ChatSession.findByIdAndUpdate(sessionId, { 
-      lastMessageAt: new Date(),
-      // 첫 번째 사용자 메시지를 제목으로 설정
-      $set: { 
-        title: role === 'user' ? content.substring(0, 50) : undefined 
-      }
-    });
+
+    const session = await ChatSession.findById(sessionId);
+    if (!session) {
+      return res.status(404).json({ success: false, error: "세션을 찾을 수 없습니다." });
+    }
+
+    session.messages.push(message._id);
+    session.lastMessageAt = new Date();
+
+    if (role === 'user') {
+      await session.updateTitle(content); // updateTitle 내에서 save 포함됨
+    } else {
+      await session.save();
+    }
 
     res.json({ success: true, message });
   } catch (error) {
+    console.error('💥 메시지 저장 중 오류:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
 
 // 세션 삭제 (관련 메시지도 함께 삭제)
 router.delete('/session/:sessionId', async (req, res) => {

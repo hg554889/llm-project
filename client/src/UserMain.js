@@ -204,12 +204,12 @@ const UserMain = () => {
 
   // 메시지를 DB에 저장하는 함수
   const saveMessageToDB = async (message) => {
+    if (!message.sessionId) {
+      console.error("❗ sessionId가 없음 - 메시지 저장 불가", message);
+      return;
+      }
     try {
-      await axios.post('http://localhost:3001/chat/message', {
-        sessionId: currentSessionId,
-        role: message.role,
-        content: message.content
-      });
+      await axios.post('http://localhost:3001/chat/message', message);
     } catch (error) {
       console.error('메시지 저장 오류:', error);
     }
@@ -289,31 +289,52 @@ const UserMain = () => {
     }
   };
 
+  const createNewSessionAndReturnId = async () => {
+    try {
+      const response = await axios.post('http://localhost:3001/chat/session', {
+        userEmail: localStorage.getItem('userEmail')
+      });
+      if (response.data.success) {
+        return response.data.sessionId;
+      }
+    } catch (error) {
+      console.error('세션 생성 오류:', error);
+    }
+    return null;
+  };
+  
+
   // handleSendQuestion 함수 수정
   const handleSendQuestion = async (e) => {
     if (e) e.preventDefault();
     if (!searchQuery.trim() || isProcessing) return;
-
-    // 새로운 채팅이면 세션 생성
-    if (!currentSessionId) {
-      await startNewChat();
+  
+    let sessionId = currentSessionId;
+  
+    // 세션이 없으면 새로 만들고 세팅
+    if (!sessionId) {
+      sessionId = await createNewSessionAndReturnId();
+      if (!sessionId) {
+        console.error("❗ 세션 생성 실패로 메시지 전송 중단");
+        return;
+      }
+      setCurrentSessionId(sessionId);
     }
-
+  
     const question = searchQuery.trim();
     setSearchQuery('');
     setIsProcessing(true);
-
+  
     const newUserMessage = {
-      sessionId: currentSessionId,
+      sessionId: sessionId,
       role: 'user',
       content: question,
       timestamp: new Date().toISOString()
     };
-
-    // 현재 세션의 채팅 기록에 추가
+  
     setChatHistory(prev => [...prev, newUserMessage]);
-    await saveMessageToDB(newUserMessage);
-
+    await saveMessageToDB(newUserMessage); // ✅ 한 번만 저장
+  
     const loadingMessageId = Date.now() + 1;
     const loadingMessage = {
       id: loadingMessageId,
@@ -322,54 +343,55 @@ const UserMain = () => {
       isLoading: true,
       timestamp: new Date().toISOString()
     };
-
+  
     setChatHistory(prev => [...prev, loadingMessage]);
-
+  
     try {
       const response = await axios.post('http://localhost:3001/ai/generate', {
-        sessionId: currentSessionId,
+        sessionId: sessionId,  // ✅ 반드시 포함
         textGen: question
       });
-
+  
       let aiResponseContent = response.data.chatbot_response;
       if (typeof aiResponseContent === 'object') {
         aiResponseContent = JSON.stringify(aiResponseContent, null, 2);
       }
-
+  
       const aiMessage = {
-        sessionId: currentSessionId,
+        sessionId: sessionId,
         role: 'assistant',
         content: String(aiResponseContent),
         timestamp: new Date().toISOString()
       };
-
+  
       setChatHistory(prev => {
-        const filteredMessages = prev.filter(msg => !msg.isLoading);
-        return [...filteredMessages, aiMessage];
+        const filtered = prev.filter(msg => !msg.isLoading);
+        return [...filtered, aiMessage];
       });
-      
+  
       await saveMessageToDB(aiMessage);
-      await fetchChatSessions(); // 세션 목록 업데이트
-
+      await fetchChatSessions();
       setIsNewChat(false);
+  
     } catch (error) {
       console.error('AI 응답 오류:', error);
       const errorMessage = {
         id: Date.now() + 2,
         role: 'assistant',
-        content: '죄송합니다. 응답 생성 중에 오류가 발생했습니다. 다시 시도해 주세요.',
+        content: '죄송합니다. 응답 생성 중에 오류가 발생했습니다.',
         isError: true,
         timestamp: new Date().toISOString()
       };
       setChatHistory(prev => {
-        const filteredMessages = prev.filter(msg => msg.id !== loadingMessageId);
-        return [...filteredMessages, errorMessage];
+        const filtered = prev.filter(msg => msg.id !== loadingMessageId);
+        return [...filtered, errorMessage];
       });
-      saveMessageToDB(errorMessage);
+      await saveMessageToDB(errorMessage);
     } finally {
       setIsProcessing(false);
     }
   };
+  
 
   // History 저장 함수 추가
   const saveToHistory = () => {
@@ -411,16 +433,16 @@ const UserMain = () => {
     try {
       const response = await axios.get(`http://localhost:3001/chat/messages/${sessionId}`);
       if (response.data.success) {
-        setChatHistory(response.data.messages); // 채팅 기록 업데이트
-        setCurrentSessionId(sessionId); // 현재 세션 ID 설정
-        setIsNewChat(false); // 새로운 채팅 상태 해제
+        setChatHistory(response.data.messages); // 업데이트
+        setCurrentSessionId(sessionId); // 꼭 필요!
       } else {
-        console.error('메시지 조회 실패:', response.data.error);
+        console.error('❌ 메시지 조회 실패:', response.data.error);
       }
     } catch (error) {
-      console.error('메시지 조회 오류:', error);
+      console.error('❌ 메시지 조회 오류:', error);
     }
   };
+  
 
   // History 항목 삭제 함수 추가
   const deleteHistoryItem = async (sessionId, e) => {
@@ -607,9 +629,11 @@ const UserMain = () => {
               className="history-item"
             >
               <div className="history-item-content">
-                <span className="history-title">
-                  {session.title || "새로운 채팅"}
-                </span>
+              <span className="history-title">
+                {session.title && session.title !== "새로운 채팅"
+                  ? session.title
+                  : session.messages?.[0]?.content?.substring(0, 20) || "새로운 채팅"}
+              </span>
                 <span className="history-date">
                   {new Date(session.lastMessageAt).toLocaleDateString()}
                 </span>

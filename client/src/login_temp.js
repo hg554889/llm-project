@@ -18,10 +18,37 @@ const Login_temp = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Logging in with", username, newPassword, newPasswordConfirm);
+  
+    if (!username || !newPassword || !newPasswordConfirm) {
+      alert("모든 필드를 입력해주세요.");
+      return;
+    }
+  
+    if (newPassword !== newPasswordConfirm) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+  
+    try {
+      const response = await axios.post('http://localhost:3001/findp', {
+        username,
+        newPassword
+      });
+  
+      if (response.data.success) {
+        alert('비밀번호가 성공적으로 변경되었습니다.');
+        navigate('/login');
+      } else {
+        alert('비밀번호 변경 실패: ' + response.data.message);
+      }
+    } catch (err) {
+      console.error('비밀번호 변경 오류:', err);
+      alert('서버 오류가 발생했습니다.');
+    }
   };
+  
 
 
     return (
@@ -44,7 +71,7 @@ const Login_temp = () => {
         <h1 onClick={() => navigate('/')}>Code Programming Runner</h1>
           
         <div className='right-section'>
-          <i className="fa-solid fa-user-plus" onClick={() => navigate('/login')}></i>
+          <i className="fa-solid fa-user-plus" ></i>
           <i className="fa-solid fa-layer-group" ></i>
         </div>
       </div>

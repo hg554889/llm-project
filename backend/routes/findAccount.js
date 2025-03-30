@@ -5,7 +5,7 @@ const User = require("../models/User"); // User 모델 import 추가
 require("dotenv").config();
 
 // 계정 찾기 라우트 추가
-router.post('/search', asyncHandler(async (req, res) => {
+router.post('/', asyncHandler(async (req, res) => {
     const { username, email } = req.body;
 
     if (!username && !email) {

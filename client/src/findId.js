@@ -50,7 +50,7 @@ const FindId = () => {
     const isEmail = isValidEmail(email);
     
     // 백엔드 API 호출
-    axios.post('http://localhost:3001/search', { 
+    axios.post('http://localhost:3001/search/', { 
       // 이메일 형식이면 email 필드에, 아니면 username 필드에 전송
       ...(isEmail ? { email } : { username: email })
     })
